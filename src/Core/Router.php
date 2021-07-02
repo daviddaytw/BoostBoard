@@ -1,17 +1,23 @@
 <?php
 namespace BoostBoard\Core;
 
-use BoostBoard\Modules\RouteList;
-
 class Router
 {
   private $modules = [];
-
+  
+  /**
+   * Route table will be generate when constructing.
+   */
   public function __construct()
   {
     $this->createRouteTable();
   }
-
+  
+  /**
+   * Retrieve the list of generated modules.
+   * 
+   * @return Array - The list of module.
+   */
   public function getModules()
   {
     $results = $this->modules;
@@ -25,6 +31,9 @@ class Router
     return $results;
   }
 
+  /**
+   * Generate route table for the user.
+   */
   private function createRouteTable()
   {
     $modules = scandir(__DIR__.'/../Modules');
@@ -48,6 +57,14 @@ class Router
     }
   }
 
+  /**
+   * Invoking router will call the corresponding controller to render the page.
+   * 
+   * @param String $uri - The requested URL
+   * @param String $method - The HTTP method of request
+   * @param $request - Request parameters
+   * @return Boolean - Whether there exist the route.
+   */
   public function __invoke(String $uri, String $method, $request)
   {
     $route = '/' . strtok($uri, '/');
