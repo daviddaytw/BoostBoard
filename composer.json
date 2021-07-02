@@ -1,0 +1,22 @@
+{
+  "name": "dj6082013/boostboard",
+  "description": "A PHP dashboard framework for monitor and management.",
+  "keywords": ["framework", "boostboard"],
+  "type": "project",
+  "require": {
+    "phpunit/phpunit": "^9.5",
+    "twig/twig": "^3.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "BoostBoard\\": "src"
+    }
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "David Day",
+      "email": "dj6082013@gmail.com"
+    }
+  ]
+}

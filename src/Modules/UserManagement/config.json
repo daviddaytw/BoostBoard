@@ -1,0 +1,9 @@
+{
+  "display": "Users",
+  "route": "/users",
+  "order": 9,
+  "permission": 9,
+  "database": {
+    "dsn": "sqlite:data/board.db"
+  }
+}
