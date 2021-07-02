@@ -1,7 +1,8 @@
 <?php
 namespace BoostBoard\Core;
 
-class Middleware {
+class Middleware
+{
     /**
      * List of middlewares, the request will be pass by the order in this array.
      */
@@ -12,8 +13,8 @@ class Middleware {
     /**
      * Invoking middleware to let request pass all middlewares.
      * 
-     * @param String $uri - The requested URI.
-     * @param String $method - The HTTP method of the request.
+     * @param String $uri     - The requested URI.
+     * @param String $method  - The HTTP method of the request.
      * @param String $request - The array containing the request parameters.
      * 
      * @return Boolean - Whether allow request to pass into router.
@@ -23,8 +24,7 @@ class Middleware {
         foreach($this->middlewares as $class)
         {
             $middleware = new $class();
-            if( !$middleware($uri, $method, $request) )
-            {
+            if(!$middleware($uri, $method, $request)) {
                 return false;
             }
         }

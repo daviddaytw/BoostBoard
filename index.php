@@ -33,27 +33,27 @@ $request = (object) $_REQUEST;
 session_start();
 
 $middleware = new \BoostBoard\Core\Middleware;
-if ( $middleware($url, $method, $request) )
-{
+if ($middleware($url, $method, $request) ) {
 
-  $router = new \BoostBoard\Core\Router;
-  $content = $router($url, $method, $request);
+    $router = new \BoostBoard\Core\Router;
+    $content = $router($url, $method, $request);
   
-  $loader = new \Twig\Loader\FilesystemLoader(__DIR__. '/theme');
-  $twig = new \Twig\Environment($loader);
+    $loader = new \Twig\Loader\FilesystemLoader(__DIR__. '/theme');
+    $twig = new \Twig\Environment($loader);
   
-  if( $content )
-  {
-    $template = $twig->load('layout.twig');
-    echo $template->render([
-      'modules' => $router->getModules(),
-      'content' => $content
-    ]);
-  }
-  else
-  {
-    $template = $twig->load('404.twig');
-    echo $template->render();
-    http_response_code(404);
-  }  
+    if($content) {
+        $template = $twig->load('layout.twig');
+        echo $template->render(
+            [
+            'modules' => $router->getModules(),
+            'content' => $content
+            ]
+        );
+    }
+    else
+    {
+        $template = $twig->load('404.twig');
+        echo $template->render();
+        http_response_code(404);
+    }  
 }

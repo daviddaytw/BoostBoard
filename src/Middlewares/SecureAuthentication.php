@@ -1,7 +1,8 @@
 <?php
 namespace BoostBoard\Middlewares;
 
-class SecureAuthentication {
+class SecureAuthentication
+{
     
     /**
      * The constructor initialize database connection.
@@ -25,8 +26,7 @@ class SecureAuthentication {
         $sth->execute([$username, hash('sha256', $password)]);
         $result = $sth->fetch(\PDO::FETCH_ASSOC);
         
-        if($result != false) 
-        {
+        if($result != false) {
             $token = openssl_random_pseudo_bytes(16);
             $token = bin2hex($token);
             $sth = $this->db->prepare('INSERT INTO sessions (userID, token) VALUES (?, ?)');
@@ -42,7 +42,7 @@ class SecureAuthentication {
     /**
      * Verify user session
      * 
-     * @param String $token - The token of the session.
+     * @param String                               $token - The token of the session.
      * 
      * @param Boolean - Whether the token is valid.
      */
@@ -56,18 +56,16 @@ class SecureAuthentication {
     /**
      * Invoke the middleware will check if request is authenticated.
      * 
-     * @param String $uri - The requested URI.
-     * @param String $method - The HTTP method of the request.
+     * @param String $uri      - The requested URI.
+     * @param String $method   - The HTTP method of the request.
      * @param &$request - The request parameter.
      * 
      * @return booelean - Whether to pass to next middleware.
      */
     public function __invoke($uri, $method, &$request)
     {
-        if(isset($_SESSION['token']))
-        {
-            if($uri == '/logout' || !$this->verifySession($_SESSION['token']))
-            {
+        if(isset($_SESSION['token'])) {
+            if($uri == '/logout' || !$this->verifySession($_SESSION['token'])) {
                 unset($_SESSION['token'], $_SESSION['privilege']);
             }
             else
@@ -75,10 +73,8 @@ class SecureAuthentication {
                 return true;
             }
         }
-        if($uri == '/login' && $method == 'POST')
-        {
-            if($this->authenticate($request->username, $request->password))
-            {
+        if($uri == '/login' && $method == 'POST') {
+            if($this->authenticate($request->username, $request->password)) {
                 header('Location: /');
                 return false;
             }
