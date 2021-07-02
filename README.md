@@ -1,5 +1,6 @@
 # BoostBoard
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/41dfe17ea6fa4388835b0750b4ec3771)](https://www.codacy.com/gh/dj6082013/BoostBoard/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dj6082013/BoostBoard&amp;utm_campaign=Badge_Grade)
 [![GitHub release](https://img.shields.io/github/release/dj6082013/BoostBoard.svg)](https://GitHub.com/dj6082013/BoostBoard/releases/)
 [![GitHub license](https://img.shields.io/github/license/dj6082013/BoostBoard.svg)](https://github.com/dj6082013/BoostBoard/blob/master/LICENSE)
 [![Github all releases](https://img.shields.io/github/downloads/dj6082013/BoostBoard/total.svg)](https://github.com/dj6082013/BoostBoard/releases/)
