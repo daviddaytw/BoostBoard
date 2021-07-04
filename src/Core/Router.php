@@ -26,8 +26,8 @@ class Router
         usort(
             $results,
             function ($a, $b) {
-                $orderA = $a->config->order;
-                $orderB = $b->config->order;
+                $orderA = $a->config['order'];
+                $orderB = $b->config['order'];
                 if ($orderA < $orderB) {
                     return -1;
                 } elseif ($orderA == $orderB) {
@@ -53,10 +53,10 @@ class Router
             if (is_dir($path) && is_file($path.'/config.json')) {
                 $class  = '\BoostBoard\Modules\\'.$module.'\Controller';
                 $rawConfig = file_get_contents($path . '/config.json');
-                $config = json_decode($rawConfig);
+                $config = json_decode($rawConfig, true);
 
-                if ($privilege >= $config->permission) {
-                    $this->modules[$config->route] = (object) [
+                if ($privilege >= $config['permission']) {
+                    $this->modules[$config['route']] = (object) [
                         'controller' => $class,
                         'config' => $config
                     ];

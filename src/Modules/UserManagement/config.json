@@ -5,5 +5,9 @@
   "permission": 9,
   "database": {
     "dsn": "sqlite:data/board.db"
+  },
+  "subLink": {
+    "User List": "/users",
+    "Create User" : "/users/create"
   }
 }

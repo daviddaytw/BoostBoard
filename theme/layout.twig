@@ -17,7 +17,18 @@
       <a class="navbar-brand" href="#">BoostBoard</a>
       <nav class="nav nav-pills flex-column">
         {% for module in modules %}
-          <a class="nav-link" href="{{ module.config.route }}">{{ module.config.display }}</a>
+          {% if module.config.subLink %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ module.config.display }}</a>
+              <ul class="dropdown-menu">
+                {% for text, link in module.config.subLink %}
+                  <li><a class="dropdown-item" href="{{ link }}">{{ text }}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% else %}
+            <a class="nav-link" href="{{ module.config.route }}">{{ module.config.display }}</a>
+          {% endif %}
         {% endfor %}
         <a class="nav-link" href="/logout">Logout</a>
       </nav>
