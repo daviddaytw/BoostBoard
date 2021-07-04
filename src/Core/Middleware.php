@@ -13,21 +13,18 @@ class Middleware
     /**
      * Invoking middleware to let request pass all middlewares.
      * 
-     * @param String $uri     - The requested URI.
-     * @param String $method  - The HTTP method of the request.
-     * @param String $request - The array containing the request parameters.
-     * 
-     * @return Boolean - Whether allow request to pass into router.
+     * @param Request  &$request  - The request object.
+     * @param Response &$response - The response object.
      */
-    public function __invoke(String $uri,String $method, &$request)
+    public function __invoke(Request &$request, Response &$response) : void
     {
         foreach($this->middlewares as $class)
         {
             $middleware = new $class();
-            if(!$middleware($uri, $method, $request)) {
-                return false;
+            $middleware($request, $response);
+            if ($response->isBlock()) { 
+                break;
             }
         }
-        return true;
     }
 }

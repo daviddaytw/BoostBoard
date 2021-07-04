@@ -27,33 +27,43 @@ require __DIR__.'/vendor/autoload.php';
 */
 
 
+session_start();
 $url = strtok($_SERVER["REQUEST_URI"], '?');
 $method = $_SERVER['REQUEST_METHOD'];
-$request = (object) $_REQUEST;
-session_start();
+$request = new \BoostBoard\Core\Request($url, $method, $_REQUEST, $_SESSION);
+$response = new \BoostBoard\Core\Response();
 
 $middleware = new \BoostBoard\Core\Middleware;
-if ($middleware($url, $method, $request) ) {
+$middleware($request, $response);
 
-    $router = new \BoostBoard\Core\Router;
-    $content = $router($url, $method, $request);
-  
-    $loader = new \Twig\Loader\FilesystemLoader(__DIR__. '/theme');
-    $twig = new \Twig\Environment($loader);
-  
-    if($content) {
-        $template = $twig->load('layout.twig');
-        echo $template->render(
-            [
-            'modules' => $router->getModules(),
-            'content' => $content
-            ]
-        );
-    }
-    else
-    {
-        $template = $twig->load('404.twig');
-        echo $template->render();
-        http_response_code(404);
-    }  
+if (!$response->isBlock()) {
+    $router = new \BoostBoard\Core\Router($request->getPrivilege());
+    $router($request, $response);
+}
+
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__. '/theme');
+$twig = new \Twig\Environment($loader);
+
+$statusCode = $response->getStatusCode();
+http_response_code($statusCode);
+switch($statusCode) {
+case 200:
+    $template = $twig->load('layout.twig');
+    echo $template->render(
+        [
+        'modules' => $router->getModules(),
+        'content' => $response->getPayload()
+        ]
+    );
+    break;
+case 404:
+    $template = $twig->load('404.twig');
+    echo $template->render();
+    break;
+case 302:
+    header($response->getRedirectHeader());
+    break;
+default:
+    echo $response->getPayload();
+    break;
 }

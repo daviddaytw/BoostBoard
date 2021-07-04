@@ -15,10 +15,13 @@ class BaseController
      * The constructor to the following actinos:
      * - Prepare twig environment for further render usage.
      * - Prepare database connection if exist.
+     * 
+     * @param String $root - The root of the module.
      */
-    public function __construct($root, $config)
+    public function __construct(String $root)
     {
-        $this->config = $config;
+        $configPath = $root . '/config.json';
+        $this->config = json_decode(file_get_contents($configPath));
 
         $loader = new \Twig\Loader\FilesystemLoader($root);
         $this->twig = new \Twig\Environment($loader);
@@ -32,16 +35,18 @@ class BaseController
     /**
      * Render the page.
      * 
-     * @param  String $uri    - The requested uri.
-     * @param  String $method - The request HTTP method.
-     * @return String - The HTML Content for the page.
+     * @param Request  $request  - The request object.
+     * @param Response $response - The resposne object.
      */
-    public function render(String $uri, String $method, $request)
+    public function render(Request $request, Response &$response) : void
     {
         foreach($this->routes as $route)
         {
-            if($route['uri'] == $uri && $route['method'] == $method) {
-                return $route['callback']($request);
+            if ($route['uri'] == $request->uri && $route['method'] == $request->method) {
+                $payload = $route['callback']($request, $response);
+                if (!is_null($payload)) { 
+                    $response->setPayload($payload);
+                }
             }
         }
     }

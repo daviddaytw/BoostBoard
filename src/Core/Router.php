@@ -7,10 +7,12 @@ class Router
   
     /**
      * Route table will be generate when constructing.
+     * 
+     * @param int $privilege - The privilege level of user.
      */
-    public function __construct()
+    public function __construct($privilege)
     {
-        $this->createRouteTable();
+        $this->createRouteTable($privilege);
     }
   
     /**
@@ -25,13 +27,11 @@ class Router
             $results, function ($a, $b) {
                 $orderA = $a->config->order;
                 $orderB = $b->config->order;
-                if($orderA < $orderB ) { 
+                if ($orderA < $orderB ) { 
                     return -1;
-                }
-                if($orderA == $orderB ) { 
+                } else if ($orderA == $orderB ) { 
                     return 0;
-                }
-                if($orderA > $orderB ) { 
+                } else { 
                     return 1;
                 }
             }
@@ -41,8 +41,10 @@ class Router
 
     /**
      * Generate route table for the user.
+     * 
+     * @param int $privilege - The privilege level of user.
      */
-    private function createRouteTable()
+    private function createRouteTable(int $privilege)
     {
         $modules = scandir(__DIR__.'/../Modules');
         foreach ( $modules as $module )
@@ -53,10 +55,10 @@ class Router
                 $rawConfig = file_get_contents($path . '/config.json');
                 $config = json_decode($rawConfig);
 
-                if($_SESSION['privilege'] >= $config->permission) {
+                if ($privilege >= $config->permission) {
                     $this->modules[$config->route] = (object) [
-                    'controller' => $class,
-                    'config' => $config
+                        'controller' => $class,
+                        'config' => $config
                     ];
                 }
             }
@@ -66,23 +68,22 @@ class Router
     /**
      * Invoking router will call the corresponding controller to render the page.
      * 
-     * @param  String $uri     - The requested URL
-     * @param  String $method  - The HTTP method of request
-     * @param  $request - Request parameters
-     * @return Boolean - Whether there exist the route.
+     * @param Request  $request   - The request object.
+     * @param Response &$response - The response object.
      */
-    public function __invoke(String $uri, String $method, $request)
+    public function __invoke(Request $request, Response &$response) : void
     {
-        $route = '/' . strtok($uri, '/');
-        $remain = '/' . substr($uri, strlen($route) + 1);
+        $route = '/' . strtok($request->uri, '/');
+        $remain = '/' . substr($request->uri, strlen($route) + 1);
+        $request->uri = $remain;
 
         if (array_key_exists($route, $this->modules) ) {
             $module = $this->modules[$route];
             $class = $module->controller;
-            $controller = new $class($module->config);
-            return $controller->render($remain, $method, $request);
+            $controller = new $class();
+            $controller->render($request, $response);
         } else {
-            return false;
+            $response->setStatusCode(404);
         }
     }
 }

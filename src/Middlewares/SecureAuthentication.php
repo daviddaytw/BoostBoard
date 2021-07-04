@@ -1,6 +1,9 @@
 <?php
 namespace BoostBoard\Middlewares;
 
+use BoostBoard\Core\Request;
+use BoostBoard\Core\Response;
+
 class SecureAuthentication
 {
     
@@ -15,76 +18,76 @@ class SecureAuthentication
     /**
      * Authenticate user, if valid then set the session.
      * 
-     * @param String $username - The inputed username.
-     * @param String $password - The inputed password.
+     * @param Request $request - The request object.
      * 
-     * @return Boolean - Whether the user is valid.
+     * @return bool - Whether the user is valid.
      */
-    private function authenticate($username, $password)
+    private function authenticate(Request &$request) : void
     {
+        $username = $request->params['username'];
+        $password = $request->params['password'];
         $sth = $this->db->prepare('SELECT id, privilege FROM users WHERE username = ? AND password = ?');
         $sth->execute([$username, hash('sha256', $password)]);
         $result = $sth->fetch(\PDO::FETCH_ASSOC);
         
-        if($result != false) {
+        if ($result != false) {
             $token = openssl_random_pseudo_bytes(16);
             $token = bin2hex($token);
             $sth = $this->db->prepare('INSERT INTO sessions (userID, token) VALUES (?, ?)');
             $sth->execute([$result['id'], $token]);
 
-            $_SESSION['token'] = $token;
-            $_SESSION['privilege'] = $result['privilege'];
+            $request->setSession('token', $token);
+        }
+    }
+
+    /**
+     * Verify user session
+     * 
+     * @param Request &$request - The request object.
+     * 
+     * @return bool - Whether the token is valid.
+     */
+    private function verifySession(Request &$request) : bool
+    {
+        $sth = $this->db->prepare('SELECT userId FROM sessions WHERE token = ? ');
+        $sth->execute([$request->getSession('token')]);
+        if ($userId = $sth->fetchColumn() ) {
+            $sth = $this->db->prepare('SELECT privilege FROM users WHERE id = ?');
+            $sth->execute([$userId]);
+            $request->setPrivilege($sth->fetchColumn());
             return true;
         }
         return false;
     }
 
     /**
-     * Verify user session
-     * 
-     * @param String                               $token - The token of the session.
-     * 
-     * @param Boolean - Whether the token is valid.
-     */
-    private function verifySession($token)
-    {
-        $sth = $this->db->prepare('SELECT COUNT(*) FROM sessions WHERE token = ? ');
-        $sth->execute([$token]);
-        return $sth->fetchColumn() > 0;
-    }
-
-    /**
      * Invoke the middleware will check if request is authenticated.
      * 
-     * @param String $uri      - The requested URI.
-     * @param String $method   - The HTTP method of the request.
-     * @param &$request - The request parameter.
+     * @param Request  &$request  - The request object.
+     * @param Response &$response - The response object.
      * 
-     * @return booelean - Whether to pass to next middleware.
+     * @return bool - Whether to pass to next middleware.
      */
-    public function __invoke($uri, $method, &$request)
+    public function __invoke(Request &$request, Response &$response) : void
     {
-        if(isset($_SESSION['token'])) {
-            if($uri == '/logout' || !$this->verifySession($_SESSION['token'])) {
-                unset($_SESSION['token'], $_SESSION['privilege']);
+        if (!is_null($request->getSession('token'))) {
+            if ($request->uri == '/logout' || !$this->verifySession($request)) {
+                $request->unsetSession('token');
+                $response->block();
+                $response->setRedirect('/');
             }
-            else
-            {
-                return true;
-            }
+            // Otherwise, permit the access.
+        } else if ($request->uri == '/login' && $request->method == 'POST') {
+            $this->authenticate($request);
+            $response->block();
+            $response->setRedirect('/');
+        } else {
+            $loader = new \Twig\Loader\FilesystemLoader('theme');
+            $twig = new \Twig\Environment($loader);
+    
+            $template = $twig->load('auth.twig');
+            $response->block();
+            $response->setPayload($template->render());
         }
-        if($uri == '/login' && $method == 'POST') {
-            if($this->authenticate($request->username, $request->password)) {
-                header('Location: /');
-                return false;
-            }
-        }
-
-        $loader = new \Twig\Loader\FilesystemLoader('theme');
-        $twig = new \Twig\Environment($loader);
-
-        $template = $twig->load('auth.twig');
-        echo $template->render();
-        return false;
     }
 }

@@ -44,14 +44,15 @@ use BoostBoard\Core\BaseController;
 
 class Controller extends BaseController
 {
-  public function __construct($config)
-  {
-    parent::__construct(__DIR__, $config);
+    public function __construct()
+    {
+        parent::__construct(__DIR__);
 
-    $this->addRoute('/', function() {
-      $traffics = $this->db->query('SELECT * FROM traffics')
-      return $this->view('pages/index.twig', ['traffics' => $traffics]);
-    });
-  }
-} d
+        $this->addRoute(
+            '/', function () {
+                return $this->view('pages/index.twig');
+            }
+        );
+    }
+}
 ```

@@ -2,12 +2,14 @@
 namespace BoostBoard\Modules\UserManagement;
 
 use BoostBoard\Core\BaseController;
+use BoostBoard\Core\Request;
+use BoostBoard\Core\Response;
 
 class Controller extends BaseController
 {
-    public function __construct($config)
+    public function __construct()
     {
-        parent::__construct(__DIR__, $config);
+        parent::__construct(__DIR__);
 
         $this->addRoute(
             '/', function () {
@@ -30,36 +32,33 @@ class Controller extends BaseController
         );
 
         $this->addRoute(
-            '/create', function ($request) {
+            '/create', function (Request $request, Response &$response) {
                 $sth = $this->db->prepare('INSERT INTO users VALUES (null, ?, ?, ?)');
-                $sth->execute([$request->username, hash('sha256', $request->password), $request->privilege]);
-                header('Location: /users');
-                return true;
+                $sth->execute([$request->params['username'], hash('sha256', $request->params['password']), $request->params['privilege']]);
+                $response->setRedirect('/users');
             }, 'POST'
         );
 
         $this->addRoute(
-            '/delete', function ($request) {
+            '/delete', function (Request $request, Response &$response) {
                 $sth = $this->db->prepare('DELETE FROM users WHERE id = ?');
-                $sth->execute([$request->id]);
-                header('Location: /users');
-                return true;
+                $sth->execute([$request->params['id']]);
+                $response->setRedirect('/users');
             }
         );
 
         $this->addRoute(
-            '/clear-session', function ($request) {
+            '/clear-session', function (Request $request, Response &$response) {
                 $sth = $this->db->prepare('DELETE FROM sessions WHERE userId = ?');
-                $sth->execute([$request->id]);
-                header('Location: /users');
-                return true;
+                $sth->execute([$request->params['id']]);
+                $response->setRedirect('/users');
             }
         );
 
         $this->addRoute(
-            '/update-password', function ($request) {
+            '/update-password', function (Request $request) {
                 $sth = $this->db->prepare('UPDATE users SET password=? WHERE id = ?');
-                $sth->execute([hash('sha256', $request->password), $request->id]);
+                $sth->execute([hash('sha256', $request->params['password']), $request->params['id']]);
                 return 'Password Updated';
             }, 'POST'
         );

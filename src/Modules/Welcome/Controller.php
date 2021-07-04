@@ -5,9 +5,9 @@ use BoostBoard\Core\BaseController;
 
 class Controller extends BaseController
 {
-    public function __construct($config)
+    public function __construct()
     {
-        parent::__construct(__DIR__, $config);
+        parent::__construct(__DIR__);
 
         $this->addRoute(
             '/', function () {
