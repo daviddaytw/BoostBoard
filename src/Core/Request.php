@@ -1,4 +1,5 @@
 <?php
+
 namespace BoostBoard\Core;
 
 class Request
@@ -6,12 +7,12 @@ class Request
     /**
      * Construct a request.
      *
-     * @param String $uri     - The URI of the request.
-     * @param String $method  - The HTTP method of the request.
+     * @param string $uri     - The URI of the request.
+     * @param string $method  - The HTTP method of the request.
      * @param array  $params  - The parameters passed by the request.
      * @param array  $session - The session data of the request.
      */
-    public function __construct(String $uri, String $method = 'GET', array $params = [], array $session = [])
+    public function __construct(string $uri, string $method = 'GET', array $params = [], array $session = [])
     {
         $this->uri = $uri;
         $this->method = $method;
@@ -25,7 +26,7 @@ class Request
      *
      * @return int - The privilege level.
      */
-    public function getPrivilege() : int
+    public function getPrivilege(): int
     {
         return $this->privilege;
     }
@@ -35,7 +36,7 @@ class Request
      *
      * @param int $privilege - The privilege level.
      */
-    public function setPrivilege(int $privilege) : void
+    public function setPrivilege(int $privilege): void
     {
         $this->privilege = $privilege;
     }
@@ -43,9 +44,9 @@ class Request
     /**
      * Get a parameter in the request.
      *
-     * @param String $key - The key of the parameter.
+     * @param string $key - The key of the parameter.
      */
-    public function getParam(String $key)
+    public function getParam(string $key)
     {
         if (isset($this->params[$key])) {
             return $this->params[$key];
@@ -57,9 +58,9 @@ class Request
     /**
      * Get a parameter in the session data of the request.
      *
-     * @param String $key - The key of the parameter.
+     * @param string $key - The key of the parameter.
      */
-    public function getSession(String $key)
+    public function getSession(string $key)
     {
         if (isset($this->session[$key])) {
             return $this->session[$key];
@@ -71,10 +72,10 @@ class Request
     /**
      * Set session data to the request
      *
-     * @param String $key   - The key of the data.
-     * @param String $value - The value of the data.
+     * @param string $key   - The key of the data.
+     * @param string $value - The value of the data.
      */
-    public function setSession(String $key, $value) : void
+    public function setSession(string $key, $value): void
     {
         $this->session[$key] = $value;
         $_SESSION[$key] = $value;
@@ -83,9 +84,9 @@ class Request
     /**
      * Delete session data of the request.
      *
-     * @param String $key - The key to delete data.
+     * @param string $key - The key to delete data.
      */
-    public function unsetSession(String $key) : void
+    public function unsetSession(string $key): void
     {
         if (isset($_SESSION[$key])) {
             unset($_SESSION[$key], $this->session[$key]);

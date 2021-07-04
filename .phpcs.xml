@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="BoostBoard" xsi:noNamespaceSchemaLocation="../../../phpcs.xsd">
+    <description>BoostBoard coding standard.</description>
+
+    <file>index.php</file>
+    <file>src</file>
+    <file>tests</file>
+
+
+    <!-- 2. General -->
+
+    <!-- 2.1 Basic Coding Standard -->
+
+    <!-- Code MUST follow all rules outlined in PSR-12. -->
+    <rule ref="PSR12"/>
+
+    <!-- 2.2 Files -->
+
+    <!-- 2.3 Lines -->
+
+    <!-- 2.4 Indenting -->
+
+    <!-- 2.5 Keywords and Types -->
+
+    <!-- 3. Declare Statements, Namespace, and Import Statements -->
+
+    <!-- 4. Classes, Properties, and Methods -->
+
+    <!-- 4.1 Extends and Implements -->
+
+    <!-- 4.2 Using traits -->
+
+    <!-- 4.3 Properties and Constants -->
+
+    <!-- 4.4 Methods and Functions -->
+
+    <!-- 4.5 Method and Function Arguments -->
+
+    <!-- 4.6 abstract, final, and static -->
+
+    <!-- 4.7 Method and Function Calls -->
+
+    <!-- 5. Control Structures -->
+
+    <!-- 5.1 if, elseif, else -->
+
+    <!-- 5.2 switch, case -->
+
+    <!-- 5.3.1 while -->
+
+    <!-- 5.3.2 do while -->
+
+    <!-- 5.4 for -->
+
+    <!-- 5.5 foreach -->
+
+    <!-- 5.6 try, catch, finally -->
+
+    <!-- 6. Operators -->
+
+    <!-- 6.1. Unary operators -->
+
+    <!-- 6.2. Binary operators -->
+
+    <!-- 6.3. Ternary operators -->
+
+    <!-- 7. Closures -->
+
+    <!-- 8. Anonymous Classes -->
+
+</ruleset>

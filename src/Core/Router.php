@@ -1,10 +1,11 @@
 <?php
+
 namespace BoostBoard\Core;
 
 class Router
 {
     private $modules = [];
-  
+
     /**
      * Route table will be generate when constructing.
      *
@@ -14,7 +15,7 @@ class Router
     {
         $this->createRouteTable($privilege);
     }
-  
+
     /**
      * Retrieve the list of generated modules.
      *
@@ -47,11 +48,11 @@ class Router
      */
     private function createRouteTable(int $privilege)
     {
-        $modules = scandir(__DIR__.'/../Modules');
+        $modules = scandir(__DIR__ . '/../Modules');
         foreach ($modules as $module) {
-            $path = __DIR__.'/../Modules/' . $module;
-            if (is_dir($path) && is_file($path.'/config.json')) {
-                $class  = '\BoostBoard\Modules\\'.$module.'\Controller';
+            $path = __DIR__ . '/../Modules/' . $module;
+            if (is_dir($path) && is_file($path . '/config.json')) {
+                $class  = '\BoostBoard\Modules\\' . $module . '\Controller';
                 $rawConfig = file_get_contents($path . '/config.json');
                 $config = json_decode($rawConfig, true);
 
@@ -71,7 +72,7 @@ class Router
      * @param Request  $request   - The request object.
      * @param Response &$response - The response object.
      */
-    public function __invoke(Request $request, Response &$response) : void
+    public function __invoke(Request $request, Response &$response): void
     {
         $route = '/' . strtok($request->uri, '/');
         $remain = '/' . substr($request->uri, strlen($route) + 1);

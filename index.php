@@ -1,4 +1,5 @@
 <?php
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -10,7 +11,7 @@
 |
 */
 
-require __DIR__.'/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 $request = new \BoostBoard\Core\Request($url, $method, $_REQUEST, $_SESSION);
 $response = new \BoostBoard\Core\Response();
 
-$middleware = new \BoostBoard\Core\Middleware;
+$middleware = new \BoostBoard\Core\Middleware();
 $middleware($request, $response);
 
 if (!$response->isBlock()) {
@@ -38,7 +39,7 @@ if (!$response->isBlock()) {
     $router($request, $response);
 }
 
-$loader = new \Twig\Loader\FilesystemLoader(__DIR__. '/theme');
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/theme');
 $twig = new \Twig\Environment($loader);
 
 $statusCode = $response->getStatusCode();

@@ -1,4 +1,5 @@
 <?php
+
 namespace BoostBoard\Core;
 
 class Response
@@ -11,9 +12,9 @@ class Response
     /**
      * Get the formatted header to redirect.
      *
-     * @return String - The Header of redirect
+     * @return string - The Header of redirect
      */
-    public function getRedirectHeader() : String
+    public function getRedirectHeader(): string
     {
         return 'Location: ' . $this->redirection;
     }
@@ -23,7 +24,7 @@ class Response
      *
      * @param $url - The URL to redirect.
      */
-    public function setRedirect(String $url) : void
+    public function setRedirect(string $url): void
     {
         $this->redirection = $url;
         $this->setStatusCode(302);
@@ -34,7 +35,7 @@ class Response
      *
      * @return int - The HTTP status code.
      */
-    public function getStatusCode() : int
+    public function getStatusCode(): int
     {
         return $this->status;
     }
@@ -44,7 +45,7 @@ class Response
      *
      * @param int $code - The status code.
      */
-    public function setStatusCode(int $code) : void
+    public function setStatusCode(int $code): void
     {
         $this->status = $code;
     }
@@ -52,7 +53,7 @@ class Response
     /**
      * Block the response, when response is blocked it won't pass to next segment.
      */
-    public function block() : void
+    public function block(): void
     {
         $this->setStatusCode(403);
         $this->block = true;
@@ -63,7 +64,7 @@ class Response
      *
      * @return bool - True of response is blocked, otherwise false.
      */
-    public function isBlock() : bool
+    public function isBlock(): bool
     {
         return $this->block;
     }
@@ -71,19 +72,19 @@ class Response
     /**
      * Set the payload to the response.
      *
-     * @param String $payload - The payload for the response.
+     * @param string $payload - The payload for the response.
      */
-    public function setPayload(String $payload) : void
+    public function setPayload(string $payload): void
     {
         $this->payload = $payload;
     }
-    
+
     /**
      * Get the payload of the response.
      *
-     * @return String - The payload of the response.
+     * @return string - The payload of the response.
      */
-    public function getPayload() : String
+    public function getPayload(): string
     {
         return $this->payload;
     }

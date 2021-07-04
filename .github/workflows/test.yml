@@ -44,4 +44,4 @@ jobs:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_TOKEN }}
 
     - name: Check code style
-      run: phpcs --standard=PSR2 ./src/ ./tests/ index.php
+      run: phpcs

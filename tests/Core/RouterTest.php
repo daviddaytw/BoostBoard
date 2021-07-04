@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace BoostBoard\Test\Core;
 
 use BoostBoard\Core\Request;

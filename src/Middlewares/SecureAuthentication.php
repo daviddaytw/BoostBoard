@@ -1,4 +1,5 @@
 <?php
+
 namespace BoostBoard\Middlewares;
 
 use BoostBoard\Core\Request;
@@ -6,7 +7,7 @@ use BoostBoard\Core\Response;
 
 class SecureAuthentication
 {
-    
+
     /**
      * The constructor initialize database connection.
      */
@@ -22,14 +23,14 @@ class SecureAuthentication
      *
      * @return bool - Whether the user is valid.
      */
-    private function authenticate(Request &$request) : void
+    private function authenticate(Request &$request): void
     {
         $username = $request->params['username'];
         $password = $request->params['password'];
         $sth = $this->db->prepare('SELECT id, privilege FROM users WHERE username = ? AND password = ?');
         $sth->execute([$username, hash('sha256', $password)]);
         $result = $sth->fetch(\PDO::FETCH_ASSOC);
-        
+
         if ($result != false) {
             $token = openssl_random_pseudo_bytes(16);
             $token = bin2hex($token);
@@ -47,7 +48,7 @@ class SecureAuthentication
      *
      * @return bool - Whether the token is valid.
      */
-    private function verifySession(Request &$request) : bool
+    private function verifySession(Request &$request): bool
     {
         $sth = $this->db->prepare('SELECT userId FROM sessions WHERE token = ? ');
         $sth->execute([$request->getSession('token')]);
@@ -68,7 +69,7 @@ class SecureAuthentication
      *
      * @return bool - Whether to pass to next middleware.
      */
-    public function __invoke(Request &$request, Response &$response) : void
+    public function __invoke(Request &$request, Response &$response): void
     {
         if (!is_null($request->getSession('token'))) {
             if ($request->uri == '/logout' || !$this->verifySession($request)) {
@@ -84,7 +85,7 @@ class SecureAuthentication
         } else {
             $loader = new \Twig\Loader\FilesystemLoader('theme');
             $twig = new \Twig\Environment($loader);
-    
+
             $template = $twig->load('auth.twig');
             $response->block();
             $response->setPayload($template->render());

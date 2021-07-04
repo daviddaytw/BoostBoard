@@ -1,7 +1,8 @@
 <?php
+
 namespace BoostBoard\Core;
 
-use \PDO;
+use PDO;
 
 class BaseController
 {
@@ -17,9 +18,9 @@ class BaseController
      * - Prepare twig environment for further render usage.
      * - Prepare database connection if exist.
      *
-     * @param String $root - The root of the module.
+     * @param string $root - The root of the module.
      */
-    public function __construct(String $root)
+    public function __construct(string $root)
     {
         $configPath = $root . '/config.json';
         $this->config = json_decode(file_get_contents($configPath));
@@ -39,7 +40,7 @@ class BaseController
      * @param Request  $request  - The request object.
      * @param Response $response - The resposne object.
      */
-    public function render(Request $request, Response &$response) : void
+    public function render(Request $request, Response &$response): void
     {
         foreach ($this->routes as $route) {
             if ($route['uri'] == $request->uri && $route['method'] == $request->method) {
@@ -54,11 +55,11 @@ class BaseController
     /**
      * Register a request callback for the controller.
      *
-     * @param String $uri      - The uri for the request.
+     * @param string $uri      - The uri for the request.
      * @param $callback - The callback for the request.
-     * @param String $method   - The method for the request.
+     * @param string $method   - The method for the request.
      */
-    public function addRoute(String $uri, $callback, String $method = 'GET')
+    public function addRoute(string $uri, $callback, string $method = 'GET')
     {
         array_push(
             $this->routes,
@@ -73,11 +74,11 @@ class BaseController
     /**
      * Render the Twig template.
      *
-     * @param  String $path   - The filepath of the template, root path is directory `pages`.
+     * @param  string $path   - The filepath of the template, root path is directory `pages`.
      * @param  Array  $params - The parameters to render the template.
-     * @return String - The rendered result.
+     * @return string - The rendered result.
      */
-    public function view(String $path, Array $params = [])
+    public function view(string $path, array $params = [])
     {
         $template = $this->twig->load($path);
         return $template->render($params);

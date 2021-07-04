@@ -1,4 +1,5 @@
 <?php
+
 namespace BoostBoard\Core;
 
 class Middleware
@@ -16,7 +17,7 @@ class Middleware
      * @param Request  &$request  - The request object.
      * @param Response &$response - The response object.
      */
-    public function __invoke(Request &$request, Response &$response) : void
+    public function __invoke(Request &$request, Response &$response): void
     {
         foreach ($this->middlewares as $class) {
             $middleware = new $class();

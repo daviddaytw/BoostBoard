@@ -1,4 +1,5 @@
 <?php
+
 namespace BoostBoard\Modules\Welcome;
 
 use BoostBoard\Core\BaseController;

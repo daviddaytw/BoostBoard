@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace BoostBoard\Test\Core;
 
 use BoostBoard\Core\Request;
@@ -10,7 +13,7 @@ final class RequestTest extends TestCase
     {
         $request = new Request('/', 'GET');
         $this->assertNotNull($request);
-        
+
         return $request;
     }
 

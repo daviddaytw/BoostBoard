@@ -1,4 +1,7 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 namespace BoostBoard\Test\Core;
 
 use BoostBoard\Core\Response;
@@ -20,7 +23,7 @@ final class ResponseTest extends TestCase
     {
         $URL = '/test';
         $response->setRedirect($URL);
-        $this->assertEquals('Location: '. $URL, $response->getRedirectHeader());
+        $this->assertEquals('Location: ' . $URL, $response->getRedirectHeader());
         return $response;
     }
 
