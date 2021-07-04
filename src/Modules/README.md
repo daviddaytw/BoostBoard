@@ -1,4 +1,4 @@
-# How to create a module?
+# How to create a module
 
 ## Module Directory structure
 
