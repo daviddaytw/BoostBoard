@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+namespace BoostBoard\Test\Modules;
 
 use BoostBoard\Core\Request;
 use BoostBoard\Core\Response;

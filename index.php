@@ -1,7 +1,4 @@
 <?php
-
-define('BOOSTBOARD_START', microtime(true));
-
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -46,24 +43,24 @@ $twig = new \Twig\Environment($loader);
 
 $statusCode = $response->getStatusCode();
 http_response_code($statusCode);
-switch($statusCode) {
-case 200:
-    $template = $twig->load('layout.twig');
-    echo $template->render(
-        [
-        'modules' => $router->getModules(),
-        'content' => $response->getPayload()
-        ]
-    );
-    break;
-case 404:
-    $template = $twig->load('404.twig');
-    echo $template->render();
-    break;
-case 302:
-    header($response->getRedirectHeader());
-    break;
-default:
-    echo $response->getPayload();
-    break;
+switch ($statusCode) {
+    case 200:
+        $template = $twig->load('layout.twig');
+        echo $template->render(
+            [
+            'modules' => $router->getModules(),
+            'content' => $response->getPayload()
+            ]
+        );
+        break;
+    case 404:
+        $template = $twig->load('404.twig');
+        echo $template->render();
+        break;
+    case 302:
+        header($response->getRedirectHeader());
+        break;
+    default:
+        echo $response->getPayload();
+        break;
 }

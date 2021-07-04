@@ -10,7 +10,8 @@ class Controller extends BaseController
         parent::__construct(__DIR__);
 
         $this->addRoute(
-            '/', function () {
+            '/',
+            function () {
                 return $this->view('pages/index.twig');
             }
         );

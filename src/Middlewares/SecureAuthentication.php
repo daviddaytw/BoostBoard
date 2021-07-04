@@ -17,9 +17,9 @@ class SecureAuthentication
 
     /**
      * Authenticate user, if valid then set the session.
-     * 
+     *
      * @param Request $request - The request object.
-     * 
+     *
      * @return bool - Whether the user is valid.
      */
     private function authenticate(Request &$request) : void
@@ -42,16 +42,16 @@ class SecureAuthentication
 
     /**
      * Verify user session
-     * 
+     *
      * @param Request &$request - The request object.
-     * 
+     *
      * @return bool - Whether the token is valid.
      */
     private function verifySession(Request &$request) : bool
     {
         $sth = $this->db->prepare('SELECT userId FROM sessions WHERE token = ? ');
         $sth->execute([$request->getSession('token')]);
-        if ($userId = $sth->fetchColumn() ) {
+        if ($userId = $sth->fetchColumn()) {
             $sth = $this->db->prepare('SELECT privilege FROM users WHERE id = ?');
             $sth->execute([$userId]);
             $request->setPrivilege($sth->fetchColumn());
@@ -62,10 +62,10 @@ class SecureAuthentication
 
     /**
      * Invoke the middleware will check if request is authenticated.
-     * 
+     *
      * @param Request  &$request  - The request object.
      * @param Response &$response - The response object.
-     * 
+     *
      * @return bool - Whether to pass to next middleware.
      */
     public function __invoke(Request &$request, Response &$response) : void
@@ -77,7 +77,7 @@ class SecureAuthentication
                 $response->setRedirect('/');
             }
             // Otherwise, permit the access.
-        } else if ($request->uri == '/login' && $request->method == 'POST') {
+        } elseif ($request->uri == '/login' && $request->method == 'POST') {
             $this->authenticate($request);
             $response->block();
             $response->setRedirect('/');

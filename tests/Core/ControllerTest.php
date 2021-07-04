@@ -1,4 +1,6 @@
 <?php declare(strict_types=1);
+namespace BoostBoard\Test\Core;
+
 use PHPUnit\Framework\TestCase;
 use BoostBoard\Core\BaseController;
 use BoostBoard\Core\Request;
@@ -21,7 +23,8 @@ final class ControllerTest extends TestCase
     public function testRender(BaseController $controller): BaseController
     {
         $controller->addRoute(
-            '/test', function () {
+            '/test',
+            function () {
                 return 'Test Message';
             }
         );

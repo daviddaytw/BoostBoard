@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+namespace BoostBoard\Test\Core;
 
 use BoostBoard\Core\Request;
 use BoostBoard\Core\Response;
@@ -17,8 +18,9 @@ final class RouterTest extends TestCase
         $router = new Router(9999);
         $visibleModules = $router->getModules();
         $total_modules = 0;
-        foreach( scandir('src/Modules') as $file) {
-            if (is_file("src/Modules/$file/config.json")) { $total_modules++;
+        foreach (scandir('src/Modules') as $file) {
+            if (is_file("src/Modules/$file/config.json")) {
+                $total_modules++;
             }
         }
         $this->assertCount($total_modules, $visibleModules);

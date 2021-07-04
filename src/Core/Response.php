@@ -10,7 +10,7 @@ class Response
 
     /**
      * Get the formatted header to redirect.
-     * 
+     *
      * @return String - The Header of redirect
      */
     public function getRedirectHeader() : String
@@ -20,7 +20,7 @@ class Response
 
     /**
      * Redirect the request
-     * 
+     *
      * @param $url - The URL to redirect.
      */
     public function setRedirect(String $url) : void
@@ -31,7 +31,7 @@ class Response
 
     /**
      * Get the HTTP status code of response.
-     * 
+     *
      * @return int - The HTTP status code.
      */
     public function getStatusCode() : int
@@ -41,7 +41,7 @@ class Response
 
     /**
      * Set the HTTP status code of response.
-     * 
+     *
      * @param int $code - The status code.
      */
     public function setStatusCode(int $code) : void
@@ -60,7 +60,7 @@ class Response
 
     /**
      * Check if the response is blocked.
-     * 
+     *
      * @return bool - True of response is blocked, otherwise false.
      */
     public function isBlock() : bool
@@ -70,7 +70,7 @@ class Response
 
     /**
      * Set the payload to the response.
-     * 
+     *
      * @param String $payload - The payload for the response.
      */
     public function setPayload(String $payload) : void
@@ -80,7 +80,7 @@ class Response
     
     /**
      * Get the payload of the response.
-     * 
+     *
      * @return String - The payload of the response.
      */
     public function getPayload() : String

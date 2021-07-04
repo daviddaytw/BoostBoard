@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+namespace BoostBoard\Test\Modules;
 
 use BoostBoard\Core\Request;
 use BoostBoard\Core\Response;
@@ -24,7 +25,9 @@ final class UserManagementTest extends TestCase
     public function testCreate(Controller $controller): Controller
     {
         $request = new Request(
-            '/create', 'POST', [
+            '/create',
+            'POST',
+            [
             'username' => 'test',
             'password' => 'test',
             'privilege' => '0'
@@ -42,7 +45,9 @@ final class UserManagementTest extends TestCase
     public function testDelete(Controller $controller): void
     {
         $request = new Request(
-            '/delete', 'GET', [
+            '/delete',
+            'GET',
+            [
             'id' => '1',
             ]
         );

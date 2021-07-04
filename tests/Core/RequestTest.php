@@ -1,4 +1,5 @@
 <?php declare(strict_types=1);
+namespace BoostBoard\Test\Core;
 
 use BoostBoard\Core\Request;
 use PHPUnit\Framework\TestCase;

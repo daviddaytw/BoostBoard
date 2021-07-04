@@ -1,5 +1,6 @@
 <?php
 namespace BoostBoard\Core;
+
 use \PDO;
 
 class BaseController
@@ -11,11 +12,11 @@ class BaseController
 
     /**
      * Consturctor for controller.
-     * 
+     *
      * The constructor to the following actinos:
      * - Prepare twig environment for further render usage.
      * - Prepare database connection if exist.
-     * 
+     *
      * @param String $root - The root of the module.
      */
     public function __construct(String $root)
@@ -34,17 +35,16 @@ class BaseController
 
     /**
      * Render the page.
-     * 
+     *
      * @param Request  $request  - The request object.
      * @param Response $response - The resposne object.
      */
     public function render(Request $request, Response &$response) : void
     {
-        foreach($this->routes as $route)
-        {
+        foreach ($this->routes as $route) {
             if ($route['uri'] == $request->uri && $route['method'] == $request->method) {
                 $payload = $route['callback']($request, $response);
-                if (!is_null($payload)) { 
+                if (!is_null($payload)) {
                     $response->setPayload($payload);
                 }
             }
@@ -53,15 +53,16 @@ class BaseController
 
     /**
      * Register a request callback for the controller.
-     * 
+     *
      * @param String $uri      - The uri for the request.
      * @param $callback - The callback for the request.
      * @param String $method   - The method for the request.
      */
-    public function addRoute(String $uri, $callback, String $method='GET')
+    public function addRoute(String $uri, $callback, String $method = 'GET')
     {
         array_push(
-            $this->routes, [
+            $this->routes,
+            [
             'uri' => $uri,
             'method' => $method,
             'callback' => $callback
@@ -71,7 +72,7 @@ class BaseController
 
     /**
      * Render the Twig template.
-     * 
+     *
      * @param  String $path   - The filepath of the template, root path is directory `pages`.
      * @param  Array  $params - The parameters to render the template.
      * @return String - The rendered result.
