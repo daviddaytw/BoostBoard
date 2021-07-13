@@ -4,6 +4,6 @@
   "order": -1,
   "permission": 0,
   "database": {
-    "dsn": "sqlite:data/board.db"
+    "dsn": "sqlite:data.db"
   }
 }

@@ -13,7 +13,7 @@ class SecureAuthentication extends AbstractMiddleware
      */
     public function __construct()
     {
-        $this->db = new \PDO('sqlite:data/board.db');
+        $this->db = new \PDO('sqlite:data.db');
     }
 
     /**

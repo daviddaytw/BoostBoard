@@ -14,13 +14,18 @@ For this purpose in mind, BoostBoard include the following feature:
 
 - Independent configuration for each module.
 
-## Usage
+## Getting Start
 
-### Requirement
+This repository is a template repository, which means that you can copy this repository and modify the contain for your own usage.
+
+before start we'll have to initialize our database, execute the following command to create database (Note that Sqlite3 is required):
+```bash
+sqlite3 data.db < schema.sql
+```
 
 You have two choice to use BoostBoard, with docker or without docker:
 
-#### With Docker
+### With Docker
 
 You'll need Docker and docker-compose installed, the following command will create a development server on port 8080.
 ```bash
@@ -34,9 +39,9 @@ For the first time to run the BoostBoard, you'll have to download the dependenci
 ```bash
 docker-compose exec app composer install
 ```
-Visit the `http://localhost:8080` you should see the login page of BoostBoard.
+Visit the `http://localhost:8080`, you should see the login page of BoostBoard.
 
-#### Without Docker (Manually Install)
+### Without Docker (Manually Install)
 
 Without docker you will need to manually install PHP 8, Apache HTTP Server and SQLite driver, after that put the entire directory in the apache server directory usually `/var/www/`.
 
@@ -45,10 +50,6 @@ Before running, you will need to download the dependences first, execute the fol
 composer install
 ```
 Visit the `http://localhost` you should see the login page of BoostBoard.
-
-### Getting Start
-
-This repository is a template repository, which means that you can copy this repository and modify the contain for your own usage.
 
 ### Directory structure
 

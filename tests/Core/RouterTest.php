@@ -13,12 +13,7 @@ final class RouterTest extends TestCase
 {
     public function testRouteTable(): Router
     {
-        $router = new Router(-9999);
-        $visibleModules = $router->getModules();
-        $this->assertEmpty($visibleModules);
-
-
-        $router = new Router(9999);
+        $router = new Router(255);
         $visibleModules = $router->getModules();
         $total_modules = 0;
         foreach (scandir('src/Modules') as $file) {
@@ -31,18 +26,14 @@ final class RouterTest extends TestCase
         return $router;
     }
 
-    public function testInvoke(): void
+    /**
+     * @depends testRouteTable
+     */
+    public function testInvoke(Router $router): void
     {
         $request = new Request('/', 'GET');
         $response = new Response();
-        $router = new Router(9999);
         $router($request, $response);
         $this->assertEquals(200, $response->getStatusCode());
-
-
-        $router = new Router(-9999);
-        $response = new Response();
-        $router($request, $response);
-        $this->assertEquals(404, $response->getStatusCode());
     }
 }
