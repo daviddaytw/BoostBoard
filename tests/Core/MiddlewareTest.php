@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace BoostBoard\Test\Core;
 
 use PHPUnit\Framework\TestCase;
-use BoostBoard\Core\Middleware;
+use BoostBoard\Core\MiddlewareInvoker;
 use BoostBoard\Core\Request;
 use BoostBoard\Core\Response;
 
 final class MiddlwareTest extends TestCase
 {
-    public function testInvoke(): Middleware
+    public function testInvoke(): MiddlewareInvoker
     {
-        $middleware = new Middleware();
+        $middleware = new MiddlewareInvoker();
         $request = new Request('/', 'GET', ['privilege' => 0]);
         $response = new Response();
         $middleware($request, $response);

@@ -5,7 +5,7 @@ namespace BoostBoard\Middlewares;
 use BoostBoard\Core\Request;
 use BoostBoard\Core\Response;
 
-class SecureAuthentication
+class SecureAuthentication extends AbstractMiddleware
 {
 
     /**

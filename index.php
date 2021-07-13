@@ -31,8 +31,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 $request = new \BoostBoard\Core\Request($url, $method, $_REQUEST, $_SESSION);
 $response = new \BoostBoard\Core\Response();
 
-$middleware = new \BoostBoard\Core\Middleware();
-$middleware($request, $response);
+$middlewareInvoker = new \BoostBoard\Core\MiddlewareInvoker();
+$middlewareInvoker($request, $response);
 
 if (!$response->isBlock()) {
     $router = new \BoostBoard\Core\Router($request->getPrivilege());

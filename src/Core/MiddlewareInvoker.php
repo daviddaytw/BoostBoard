@@ -2,7 +2,7 @@
 
 namespace BoostBoard\Core;
 
-class Middleware
+class MiddlewareInvoker
 {
     /**
      * List of middlewares, the request will be pass by the order in this array.
