@@ -2,5 +2,8 @@
   "display": "Welcome",
   "route": "/",
   "order": -1,
-  "permission": 0
+  "permission": 0,
+  "database": {
+    "dsn": "sqlite:data/board.db"
+  }
 }
