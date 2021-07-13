@@ -18,10 +18,13 @@ For this purpose in mind, BoostBoard include the following feature:
 
 This repository is a template repository, which means that you can copy this repository and modify the contain for your own usage.
 
-before start we'll have to initialize our database, execute the following command to create database (Note that Sqlite3 is required):
+First, to initialize the database, execute the following command to create database (Note that Sqlite3 is required):
 ```bash
 sqlite3 data.db < schema.sql
 ```
+
+`schema.sql` will create an admin user whose name is `admin` and password is `password`.
+
 
 You have two choice to use BoostBoard, with docker or without docker:
 
