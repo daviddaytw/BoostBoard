@@ -18,43 +18,28 @@ For this purpose in mind, BoostBoard include the following feature:
 
 This repository is a template repository, which means that you can copy this repository and modify the contain for your own usage.
 
-First, to initialize the database, execute the following command to create database (Note that Sqlite3 is required):
+### Requirement
+
+The following packages is required:
+- PHP 7 or newer
+- Sqlite3 driver
+- MySQL driver (optional but recommended)
+
+### Running Development Server
+
+Run the server script will start the development server.
+In the first time run, it will automatically install dependencies and initialize database for you.
+
+By default, database contains an admin user whose name is `admin` and password is `password`.
+
 ```bash
-sqlite3 data.db < schema.sql
+chmod +x ./server.sh
+
+./server.sh
 ```
+Visit the `http://localhost:8080` you should see the login page of BoostBoard.
 
-`schema.sql` will create an admin user whose name is `admin` and password is `password`.
-
-
-You have two choice to use BoostBoard, with docker or without docker:
-
-### With Docker
-
-You'll need Docker and docker-compose installed, the following command will create a development server on port 8080.
-```bash
-docker-compose up
-
-# To run in the background
-docker-compose up -d
-```
-
-For the first time to run the BoostBoard, you'll have to download the dependencies first, execute the following command to install dependencies.
-```bash
-docker-compose exec app composer install
-```
-Visit the `http://localhost:8080`, you should see the login page of BoostBoard.
-
-### Without Docker (Manually Install)
-
-Without docker you will need to manually install PHP 8, Apache HTTP Server and SQLite driver, after that put the entire directory in the apache server directory usually `/var/www/`.
-
-Before running, you will need to download the dependences first, execute the following command to install dependencies.
-```bash
-composer install
-```
-Visit the `http://localhost` you should see the login page of BoostBoard.
-
-### Directory structure
+## Directory structure
 
 In this README file we will only cover the directory at root level, it learn more in the sub-directory, please read the README file inside that particular directory.
 
