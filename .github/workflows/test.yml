@@ -42,9 +42,10 @@ jobs:
       run: phpunit --coverage-clover ./clover.xml
     
     - name: Upload coverage
-      run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r clover.xml
       env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_TOKEN }}
+      if: env.CODACY_PROJECT_TOKEN != null
+      run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r clover.xml
 
     - name: Check code style
       run: phpcs
