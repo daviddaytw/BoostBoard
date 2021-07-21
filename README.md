@@ -12,7 +12,9 @@ BoostBoard is a web dashboard framework for monitor and management.
 Our goal is to create a elegant, highly adaptable and Pain-less framework for a panel or dashboard.
 For this purpose in mind, BoostBoard include the following feature:
 
+- Use Bootstrap5.
 - Independent configuration for each module.
+- pChart preinstalled.
 
 ## Getting Start
 
@@ -45,7 +47,7 @@ In this README file we will only cover the directory at root level, it learn mor
 
 - `data`: The data used by BoostBoard, for example: database that contain the user information.
 - `src`: The source code directory, if you want to add a module or a page in the BoostBoard, please read the README inside.
-- `theme`: The most fundenmental template of BoostBoard, you can customize it as you want.
+- `views`: The templates directory, you can customize it as you want.
 
 ## Contributing
 

@@ -19,4 +19,16 @@ final class WelcomeTest extends TestCase
         $router($request, $response);
         $this->assertStringContainsString('Welcome', $response->getPayload());
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testChart(): void
+    {
+        $router = new Router();
+        $request = new Request('/chart');
+        $response = new Response();
+        $router($request, $response);
+        $this->assertStringContainsString('', $response->getPayload());
+    }
 }

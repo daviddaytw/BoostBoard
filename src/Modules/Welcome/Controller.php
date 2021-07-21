@@ -4,6 +4,8 @@ namespace BoostBoard\Modules\Welcome;
 
 use PDO;
 use BoostBoard\Core\AbstractController;
+use CpChart\Data;
+use CpChart\Image;
 
 class Controller extends AbstractController
 {
@@ -17,5 +19,30 @@ class Controller extends AbstractController
             'userCount' => $userCount,
             'sessionCount' => $sessionCount,
         ]);
+    }
+
+    public function plotChart(PDO $db): string
+    {
+        $rows = $db->query("SELECT COUNT(*),strftime ('%H',createAt) hour FROM sessions
+                            WHERE `createAt` >= date('now', '-1 days')
+                            GROUP BY strftime ('%H',createAt)");
+
+        $actives = array_fill(0, 23, 0);
+        foreach ($rows as $row) {
+            $actives[(int)$row['hour']] = (int)$row['COUNT(*)'];
+        }
+
+        $data = new Data();
+        $data->addPoints($actives, "New Sessions");
+        $data->setAbscissa("Labels");
+
+        $image = new Image(700, 230, $data);
+        $image->setGraphArea(60, 40, 670, 190);
+        $image->drawScale();
+        $image->drawSplineChart();
+        $image->drawLegend(600, 40, ["Style" => LEGEND_BOX, "Mode" => LEGEND_HORIZONTAL]);
+        $image->Stroke();
+
+        return '';
     }
 }

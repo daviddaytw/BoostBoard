@@ -21,5 +21,6 @@ class Router extends AbstractRouter
         parent::__construct(self::$config);
 
         $this->get('/', Controller::class, 'index');
+        $this->get('/chart', Controller::class, 'plotChart');
     }
 }
