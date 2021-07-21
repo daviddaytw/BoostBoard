@@ -7,16 +7,16 @@ namespace BoostBoard\Test\Modules;
 use BoostBoard\Core\Request;
 use BoostBoard\Core\Response;
 use PHPUnit\Framework\TestCase;
-use BoostBoard\Modules\Welcome\Controller;
+use BoostBoard\Modules\Welcome\Router;
 
 final class WelcomeTest extends TestCase
 {
     public function testIndex(): void
     {
-        $controller = new Controller('src/Modules/Welcome');
+        $router = new Router();
         $request = new Request('/');
         $response = new Response();
-        $controller->render($request, $response);
+        $router($request, $response);
         $this->assertStringContainsString('Welcome', $response->getPayload());
     }
 }

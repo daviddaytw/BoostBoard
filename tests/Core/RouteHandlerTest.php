@@ -6,14 +6,14 @@ namespace BoostBoard\Test\Core;
 
 use BoostBoard\Core\Request;
 use BoostBoard\Core\Response;
+use BoostBoard\Core\RouteHandler;
 use PHPUnit\Framework\TestCase;
-use BoostBoard\Core\Router;
 
-final class RouterTest extends TestCase
+final class RouteHandlerTest extends TestCase
 {
-    public function testRouteTable(): Router
+    public function testRouteTable(): RouteHandler
     {
-        $router = new Router(255);
+        $router = new RouteHandler(255);
         $visibleModules = $router->getModules();
         $total_modules = 0;
         foreach (scandir('src/Modules') as $file) {
@@ -29,7 +29,7 @@ final class RouterTest extends TestCase
     /**
      * @depends testRouteTable
      */
-    public function testInvoke(Router $router): void
+    public function testInvoke(RouteHandler $router): void
     {
         $request = new Request('/', 'GET');
         $response = new Response();

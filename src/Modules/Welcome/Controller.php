@@ -3,27 +3,19 @@
 namespace BoostBoard\Modules\Welcome;
 
 use PDO;
-use BoostBoard\Core\BaseController;
+use BoostBoard\Core\AbstractController;
 
-class Controller extends BaseController
+class Controller extends AbstractController
 {
-    public function __construct()
+    public function index(PDO $db): string
     {
-        parent::__construct(__DIR__);
+        $userCount = $db->query("SELECT COUNT(*) FROM users")->fetchColumn();
+        $sessionCount = $db->query("SELECT COUNT(*) FROM sessions WHERE createAt >= datetime('now','-24 hours')")
+                        ->fetchColumn();
 
-        $this->addRoute(
-            '/',
-            function () {
-                $userCount = $this->db->query("SELECT COUNT(*) FROM users")->fetchColumn();
-                $sessionCount = $this->db
-                                ->query("SELECT COUNT(*) FROM sessions WHERE createAt >= datetime('now','-24 hours')")
-                                ->fetchColumn();
-
-                return $this->view('pages/index.twig', [
-                    'userCount' => $userCount,
-                    'sessionCount' => $sessionCount,
-                ]);
-            }
-        );
+        return $this->view('views/index.twig', [
+            'userCount' => $userCount,
+            'sessionCount' => $sessionCount,
+        ]);
     }
 }

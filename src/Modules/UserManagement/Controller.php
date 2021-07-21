@@ -2,77 +2,59 @@
 
 namespace BoostBoard\Modules\UserManagement;
 
-use BoostBoard\Core\BaseController;
+use PDO;
+use BoostBoard\Core\AbstractController;
 use BoostBoard\Core\Request;
 use BoostBoard\Core\Response;
 
-class Controller extends BaseController
+class Controller extends AbstractController
 {
-    public function __construct()
+    public function index(PDO $db)
     {
-        parent::__construct(__DIR__);
+        $users = [];
+        foreach ($db->query('SELECT * FROM users') as $row) {
+            $sth = $db->prepare('SELECT createAt FROM sessions WHERE userId = ?');
+            $sth->execute([$row['id']]);
+            $row['lastLogin'] = $sth->fetchColumn();
+            array_push($users, $row);
+        }
+        return $this->view('views/index.twig', ['users' => $users]);
+    }
 
-        $this->addRoute(
-            '/',
-            function () {
-                $users = [];
-                foreach ($this->db->query('SELECT * FROM users') as $row) {
-                    $sth = $this->db->prepare('SELECT createAt FROM sessions WHERE userId = ?');
-                    $sth->execute([$row['id']]);
-                    $row['lastLogin'] = $sth->fetchColumn();
-                    array_push($users, $row);
-                }
-                return $this->view('pages/index.twig', ['users' => $users]);
-            }
-        );
+    public function create()
+    {
+        return $this->view('views/create.twig');
+    }
 
-        $this->addRoute(
-            '/create',
-            function () {
-                return $this->view('pages/create.twig');
-            }
-        );
+    public function store(PDO $db, Request $request, Response &$response)
+    {
+        $sth = $db->prepare('INSERT INTO users VALUES (null, ?, ?, ?)');
+        $sth->execute([
+            $request->params['username'],
+            hash('sha256', $request->params['password']),
+            $request->params['privilege']
+        ]);
+        $response->setRedirect('/users');
+    }
 
-        $this->addRoute(
-            '/create',
-            function (Request $request, Response &$response) {
-                $sth = $this->db->prepare('INSERT INTO users VALUES (null, ?, ?, ?)');
-                $sth->execute([
-                    $request->params['username'],
-                    hash('sha256', $request->params['password']),
-                    $request->params['privilege']
-                ]);
-                $response->setRedirect('/users');
-            },
-            'POST'
-        );
+    public function delete(PDO $db, Request $request, Response &$response)
+    {
+            $sth = $db->prepare('DELETE FROM users WHERE id = ?');
+            $sth->execute([$request->params['id']]);
+            $response->setRedirect('/users');
+    }
 
-        $this->addRoute(
-            '/delete',
-            function (Request $request, Response &$response) {
-                $sth = $this->db->prepare('DELETE FROM users WHERE id = ?');
-                $sth->execute([$request->params['id']]);
-                $response->setRedirect('/users');
-            }
-        );
+    public function clearSession(PDO $db, Request $request, Response &$response)
+    {
+            $sth = $db->prepare('DELETE FROM sessions WHERE userId = ?');
+            $sth->execute([$request->params['id']]);
+            $response->setRedirect('/users');
+    }
 
-        $this->addRoute(
-            '/clear-session',
-            function (Request $request, Response &$response) {
-                $sth = $this->db->prepare('DELETE FROM sessions WHERE userId = ?');
-                $sth->execute([$request->params['id']]);
-                $response->setRedirect('/users');
-            }
-        );
-
-        $this->addRoute(
-            '/update-password',
-            function (Request $request) {
-                $sth = $this->db->prepare('UPDATE users SET password=? WHERE id = ?');
-                $sth->execute([hash('sha256', $request->params['password']), $request->params['id']]);
-                return 'Password Updated';
-            },
-            'POST'
-        );
+    public function updatePassword(PDO $db, Request $request)
+    {
+            $sth = $db->prepare('UPDATE users SET password=? WHERE id = ?');
+            $sth->execute([hash('sha256', $request->params['password']), $request->params['id']]);
+            return 'Password Updated';
     }
 }

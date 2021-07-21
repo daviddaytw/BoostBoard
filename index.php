@@ -26,6 +26,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 
 session_start();
+
 $url = strtok($_SERVER["REQUEST_URI"], '?');
 $method = $_SERVER['REQUEST_METHOD'];
 $request = new \BoostBoard\Core\Request($url, $method, $_REQUEST, $_SESSION);
@@ -35,7 +36,7 @@ $middlewareInvoker = new \BoostBoard\Core\MiddlewareInvoker();
 $middlewareInvoker($request, $response);
 
 if (!$response->isBlock()) {
-    $router = new \BoostBoard\Core\Router($request->getPrivilege());
+    $router = new \BoostBoard\Core\RouteHandler($request->getPrivilege());
     $router($request, $response);
 }
 

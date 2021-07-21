@@ -7,25 +7,25 @@ namespace BoostBoard\Test\Modules;
 use BoostBoard\Core\Request;
 use BoostBoard\Core\Response;
 use PHPUnit\Framework\TestCase;
-use BoostBoard\Modules\UserManagement\Controller;
+use BoostBoard\Modules\UserManagement\Router;
 
 final class UserManagementTest extends TestCase
 {
-    public function testIndex(): Controller
+    public function testIndex(): Router
     {
-        $controller = new Controller('src/Modules/UserManagement');
+        $router = new Router();
         $request = new Request('/');
         $response = new Response();
-        $controller->render($request, $response);
+        $router($request, $response);
         $this->assertNotNull($response->getPayload());
 
-        return $controller;
+        return $router;
     }
 
     /**
      * @depends testIndex
      */
-    public function testCreate(Controller $controller): Controller
+    public function testCreate(Router $router): Router
     {
         $request = new Request(
             '/create',
@@ -37,15 +37,15 @@ final class UserManagementTest extends TestCase
             ]
         );
         $response = new Response();
-        $controller->render($request, $response);
+        $router($request, $response);
         $this->assertEquals(302, $response->getStatusCode());
-        return $controller;
+        return $router;
     }
 
     /**
      * @depends testCreate
      */
-    public function testDelete(Controller $controller): void
+    public function testDelete(Router $router): void
     {
         $request = new Request(
             '/delete',
@@ -55,7 +55,7 @@ final class UserManagementTest extends TestCase
             ]
         );
         $response = new Response();
-        $controller->render($request, $response);
+        $router($request, $response);
         $this->assertEquals(302, $response->getStatusCode());
     }
 }

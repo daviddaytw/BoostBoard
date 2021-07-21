@@ -2,7 +2,7 @@
 
 namespace BoostBoard\Core;
 
-class Router
+class RouteHandler
 {
     private $modules = [];
 
@@ -52,13 +52,13 @@ class Router
         foreach ($modules as $module) {
             $path = __DIR__ . '/../Modules/' . $module;
             if (is_dir($path) && is_file($path . '/config.json')) {
-                $class  = '\BoostBoard\Modules\\' . $module . '\Controller';
+                $class  = '\BoostBoard\Modules\\' . $module . '\Router';
                 $rawConfig = file_get_contents($path . '/config.json');
                 $config = json_decode($rawConfig, true);
 
                 if ($privilege >= $config['permission']) {
                     $this->modules[$config['route']] = (object) [
-                        'controller' => $class,
+                        'router' => $class,
                         'config' => $config
                     ];
                 }
@@ -80,9 +80,9 @@ class Router
 
         if (array_key_exists($route, $this->modules)) {
             $module = $this->modules[$route];
-            $class = $module->controller;
-            $controller = new $class();
-            $controller->render($request, $response);
+            $class = $module->router;
+            $router = new $class();
+            $router($request, $response);
         } else {
             $response->setStatusCode(404);
         }
