@@ -11,29 +11,27 @@ use PHPUnit\Framework\TestCase;
 
 final class RouteHandlerTest extends TestCase
 {
-    public function testRouteTable(): RouteHandler
+    public function testInvoke(): void
     {
         $router = new RouteHandler(255);
-        $visibleModules = $router->getModules();
-        $total_modules = 0;
-        foreach (scandir('src/Modules') as $file) {
-            if (is_file("src/Modules/$file/config.json")) {
-                $total_modules++;
-            }
-        }
-        $this->assertCount($total_modules, $visibleModules);
-
-        return $router;
-    }
-
-    /**
-     * @depends testRouteTable
-     */
-    public function testInvoke(RouteHandler $router): void
-    {
         $request = new Request('/', 'GET');
         $response = new Response();
         $router($request, $response);
         $this->assertEquals(200, $response->getStatusCode());
+
+
+        $request = new Request('/users', 'GET');
+        $response = new Response();
+        $router($request, $response);
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testNotFound(): void
+    {
+        $router = new RouteHandler(-1);
+        $request = new Request('/', 'GET');
+        $response = new Response();
+        $router($request, $response);
+        $this->assertEquals(404, $response->getStatusCode());
     }
 }

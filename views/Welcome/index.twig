@@ -1,0 +1,17 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="text-center">Welcome to BoostBoard!</h1>
+    <div class="mt-4 row text-center">
+      <div class="col-md-6">
+        <h2 class="text-secondary">Total User</h2>
+        <span class="display-3">{{ userCount }}</span>
+      </div>
+      <div class="col-md-6">
+        <h2 class="text-secondary">Recent Logins (24hr)</h2>
+        <span class="display-3">{{ sessionCount }}</span>
+      </div>
+    </div>
+  </div>
+{% endblock %}

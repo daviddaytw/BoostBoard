@@ -4,8 +4,6 @@ namespace BoostBoard\Modules\UserManagement;
 
 use PDO;
 use BoostBoard\Core\AbstractController;
-use BoostBoard\Core\Request;
-use BoostBoard\Core\Response;
 
 class Controller extends AbstractController
 {
@@ -18,43 +16,43 @@ class Controller extends AbstractController
             $row['lastLogin'] = $sth->fetchColumn();
             array_push($users, $row);
         }
-        return $this->view('views/index.twig', ['users' => $users]);
+        return $this->view('UserManagement/index.twig', ['users' => $users]);
     }
 
     public function create()
     {
-        return $this->view('views/create.twig');
+        return $this->view('UserManagement/create.twig');
     }
 
-    public function store(PDO $db, Request $request, Response &$response)
+    public function store(PDO $db)
     {
         $sth = $db->prepare('INSERT INTO users VALUES (null, ?, ?, ?)');
         $sth->execute([
-            $request->params['username'],
-            hash('sha256', $request->params['password']),
-            $request->params['privilege']
+            $this->getParam('username'),
+            hash('sha256', $this->getParam('password')),
+            $this->getParam('privilege')
         ]);
-        $response->setRedirect('/users');
+        $this->response->setRedirect('/users');
     }
 
-    public function delete(PDO $db, Request $request, Response &$response)
+    public function delete(PDO $db)
     {
-            $sth = $db->prepare('DELETE FROM users WHERE id = ?');
-            $sth->execute([$request->params['id']]);
-            $response->setRedirect('/users');
+        $sth = $db->prepare('DELETE FROM users WHERE id = ?');
+        $sth->execute([$this->getParam('id')]);
+        $this->response->setRedirect('/users');
     }
 
-    public function clearSession(PDO $db, Request $request, Response &$response)
+    public function clearSession(PDO $db)
     {
-            $sth = $db->prepare('DELETE FROM sessions WHERE userId = ?');
-            $sth->execute([$request->params['id']]);
-            $response->setRedirect('/users');
+        $sth = $db->prepare('DELETE FROM sessions WHERE userId = ?');
+        $sth->execute([$this->getParam('id')]);
+        $this->response->setRedirect('/users');
     }
 
-    public function updatePassword(PDO $db, Request $request)
+    public function updatePassword(PDO $db)
     {
-            $sth = $db->prepare('UPDATE users SET password=? WHERE id = ?');
-            $sth->execute([hash('sha256', $request->params['password']), $request->params['id']]);
-            return 'Password Updated';
+        $sth = $db->prepare('UPDATE users SET password=? WHERE id = ?');
+        $sth->execute([hash('sha256', $this->getParam('password')), $this->getParam('id')]);
+        return 'Password Updated';
     }
 }

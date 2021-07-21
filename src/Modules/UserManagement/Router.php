@@ -3,14 +3,26 @@
 namespace BoostBoard\Modules\UserManagement;
 
 use BoostBoard\Core\AbstractRouter;
-use BoostBoard\Core\Request;
-use BoostBoard\Core\Response;
 
 class Router extends AbstractRouter
 {
+    public static $config = [
+        'display' => 'Users',
+        'route' => '/users',
+        'order' => 9,
+        'permission' => 250,
+        'database' => [
+            'dsn' => 'sqlite:data.db'
+        ],
+        'subLink' => [
+            'User List' => '/users',
+            'Create User' => '/users/create'
+        ]
+    ];
+
     public function __construct()
     {
-        parent::__construct(__DIR__);
+        parent::__construct(self::$config);
 
         $this->get('/', Controller::class, 'index');
         $this->get('/create', Controller::class, 'create');

@@ -13,7 +13,7 @@ class Controller extends AbstractController
         $sessionCount = $db->query("SELECT COUNT(*) FROM sessions WHERE createAt >= datetime('now','-24 hours')")
                         ->fetchColumn();
 
-        return $this->view('views/index.twig', [
+        return $this->view('Welcome/index.twig', [
             'userCount' => $userCount,
             'sessionCount' => $sessionCount,
         ]);

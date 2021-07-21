@@ -7,28 +7,20 @@ use PDO;
 class AbstractRouter
 {
     public PDO $db;
-    public $config;
-    private string $root;
     private $routes = [];
 
     /**
      * Consturctor for controller.
      *
-     * The constructor to the following actinos:
-     * - Prepare twig environment for further render usage.
-     * - Prepare database connection if exist.
+     * The constructor will prepare database connection if exist.
      *
-     * @param string $root - The root of the module.
+     * @param $config - The configuration object.
      */
-    public function __construct(string $root)
+    public function __construct($config)
     {
-        $this->root = $root;
-        $configPath = $root . '/config.json';
-        $this->config = json_decode(file_get_contents($configPath));
-
-        if (property_exists($this->config, 'database')) {
-            $dbConfig = $this->config->database;
-            $this->db = new PDO($dbConfig->dsn, $dbConfig->user ?? null, $dbConfig->password ?? null);
+        if (array_key_exists('database', $config)) {
+            $dbConfig = $config['database'];
+            $this->db = new PDO($dbConfig['dsn'], $dbConfig['user'] ?? null, $dbConfig['password'] ?? null);
         }
     }
 
@@ -42,9 +34,9 @@ class AbstractRouter
     {
         foreach ($this->routes as $route) {
             if ($route['uri'] == $request->uri && $route['method'] == $request->method) {
-                $controller = new $route['controller']($this->root);
+                $controller = new $route['controller']($request, $response);
                 $callback = $route['callback'];
-                $payload = $controller->$callback($this->db, $request, $response);
+                $payload = $controller->$callback($this->db);
                 if (!is_null($payload)) {
                     $response->setPayload($payload);
                 }

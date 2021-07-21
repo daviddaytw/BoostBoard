@@ -6,9 +6,19 @@ use BoostBoard\Core\AbstractRouter;
 
 class Router extends AbstractRouter
 {
+    public static $config = [
+        'display' => 'Welcome',
+        'route' => '/',
+        'order' => -1,
+        'permission' => 0,
+        'database' => [
+            'dsn' => 'sqlite:data.db'
+        ]
+    ];
+
     public function __construct()
     {
-        parent::__construct(__DIR__);
+        parent::__construct(self::$config);
 
         $this->get('/', Controller::class, 'index');
     }

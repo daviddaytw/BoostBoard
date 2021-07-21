@@ -2,39 +2,43 @@
 
 namespace BoostBoard\Core;
 
-use PDO;
+use BoostBoard\Core\TemplateRenderer;
 
 class AbstractController
 {
-    public $db;
-    public $config;
-    private $twig;
-
     /**
      * Consturctor for controller.
      *
-     * The constructor to the following actinos:
-     * - Prepare twig environment for further render usage.
-     * - Prepare database connection if exist.
-     *
-     * @param string $root - The root of the module.
+     * @param Request $request - The request object.
+     * @param Response &$response - The response object.
      */
-    public function __construct(string $root)
+    public function __construct(Request $request, Response &$response)
     {
-        $loader = new \Twig\Loader\FilesystemLoader($root);
-        $this->twig = new \Twig\Environment($loader);
+        $this->request = $request;
+        $this->response = $response;
+    }
+
+    /**
+     * Get parameter from request.
+     *
+     * @param string $key - The key of the parameter.
+     * @return string - The value of the parameter.
+     */
+    public function getParam(string $key): string
+    {
+        return $this->request->params[$key];
     }
 
     /**
      * Render the Twig template.
      *
      * @param  string $path   - The filepath of the template, root path is directory `pages`.
-     * @param  Array  $params - The parameters to render the template.
+     * @param  array  $params - The parameters to render the template.
      * @return string - The rendered result.
      */
-    public function view(string $path, array $params = [])
+    public function view(string $path, array $params = []): string
     {
-        $template = $this->twig->load($path);
-        return $template->render($params);
+        $renderer = new TemplateRenderer($this->request->privilege);
+        return $renderer($path, $params);
     }
 }

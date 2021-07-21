@@ -17,7 +17,7 @@ class Request
         $this->uri = $uri;
         $this->method = $method;
         $this->params = $params;
-        $this->privilege = NAN;
+        $this->privilege = -1;
         $this->session = $session;
     }
 

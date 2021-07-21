@@ -2,6 +2,8 @@
 
 namespace BoostBoard\Core;
 
+use BoostBoard\Modules\RouteTable;
+
 class RouteHandler
 {
     private $modules = [];
@@ -11,60 +13,12 @@ class RouteHandler
      *
      * @param int $privilege - The privilege level of user.
      */
-    public function __construct($privilege)
+    public function __construct(int $privilege)
     {
-        $this->createRouteTable($privilege);
+        $routeTable = new RouteTable();
+        $this->modules = $routeTable($privilege);
     }
 
-    /**
-     * Retrieve the list of generated modules.
-     *
-     * @return Array - The list of module.
-     */
-    public function getModules()
-    {
-        $results = $this->modules;
-        usort(
-            $results,
-            function ($a, $b) {
-                $orderA = $a->config['order'];
-                $orderB = $b->config['order'];
-                if ($orderA < $orderB) {
-                    return -1;
-                } elseif ($orderA == $orderB) {
-                    return 0;
-                } else {
-                    return 1;
-                }
-            }
-        );
-        return $results;
-    }
-
-    /**
-     * Generate route table for the user.
-     *
-     * @param int $privilege - The privilege level of user.
-     */
-    private function createRouteTable(int $privilege)
-    {
-        $modules = scandir(__DIR__ . '/../Modules');
-        foreach ($modules as $module) {
-            $path = __DIR__ . '/../Modules/' . $module;
-            if (is_dir($path) && is_file($path . '/config.json')) {
-                $class  = '\BoostBoard\Modules\\' . $module . '\Router';
-                $rawConfig = file_get_contents($path . '/config.json');
-                $config = json_decode($rawConfig, true);
-
-                if ($privilege >= $config['permission']) {
-                    $this->modules[$config['route']] = (object) [
-                        'router' => $class,
-                        'config' => $config
-                    ];
-                }
-            }
-        }
-    }
 
     /**
      * Invoking router will call the corresponding controller to render the page.
@@ -74,14 +28,26 @@ class RouteHandler
      */
     public function __invoke(Request $request, Response &$response): void
     {
-        $route = '/' . strtok($request->uri, '/');
-        $remain = '/' . substr($request->uri, strlen($route) + 1);
-        $request->uri = $remain;
 
-        if (array_key_exists($route, $this->modules)) {
-            $module = $this->modules[$route];
-            $class = $module->router;
-            $router = new $class();
+        $routerClass = null;
+        $prefixLength = 0;
+        foreach ($this->modules as $module) {
+            $route = $module['prefix'];
+            if ($prefixLength < strlen($route)) {
+                if (substr($request->uri, 0, strlen($route)) == $route) {
+                    $routerClass = $module['router'];
+                    $remain = substr($request->uri, strlen($route));
+                    if ($remain == '' || $remain[0] != '/') {
+                        $remain = '/' . $remain;
+                    }
+                    $prefixLength = strlen($route);
+                }
+            }
+        }
+
+        if ($routerClass != null) {
+            $router = new $routerClass();
+            $request->uri = $remain;
             $router($request, $response);
         } else {
             $response->setStatusCode(404);

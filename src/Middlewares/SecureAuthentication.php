@@ -83,7 +83,7 @@ class SecureAuthentication extends AbstractMiddleware
             $response->block();
             $response->setRedirect('/');
         } else {
-            $loader = new \Twig\Loader\FilesystemLoader('theme');
+            $loader = new \Twig\Loader\FilesystemLoader('views');
             $twig = new \Twig\Environment($loader);
 
             $template = $twig->load('auth.twig');

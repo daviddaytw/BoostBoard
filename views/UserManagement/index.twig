@@ -1,0 +1,49 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+  <div>
+    <h1>User Management</h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Username</th>
+          <th scope="col">Privilege</th>
+          <th scope="col">Last login</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <th scope="row">{{ user.id }}</th>
+          <td>{{ user.username }}</td>
+          <td>{{ user.privilege }}</td>
+          <td>{{ user.lastLogin }}</td>
+          <td>
+            <button onclick="updatePassword({{ user.id }})" class="btn btn-primary">Update Password</button>
+            <a href="/users/clear-session?id={{ user.id }}" role="button" class="btn btn-primary">Clear Session</button>
+            <a href="/users/delete?id={{ user.id }}" role="button" class="btn btn-primary">Delete</button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <script>
+  function updatePassword(userId) {
+    var result = prompt('Please enter new password');
+    var form = new FormData();
+    form.append('id', userId);
+    form.append('password', result);
+    
+    fetch('/users/update-password', {
+      method: 'POST',
+      body: form
+    })
+      .then(() => {
+        console.log('Password changed!');
+      });
+  }
+  </script>
+{% endblock %}

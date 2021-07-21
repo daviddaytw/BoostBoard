@@ -11,6 +11,8 @@
 |
 */
 
+use BoostBoard\Core\TemplateRenderer;
+
 require __DIR__ . '/vendor/autoload.php';
 
 /*
@@ -40,24 +42,12 @@ if (!$response->isBlock()) {
     $router($request, $response);
 }
 
-$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/theme');
-$twig = new \Twig\Environment($loader);
-
 $statusCode = $response->getStatusCode();
 http_response_code($statusCode);
 switch ($statusCode) {
-    case 200:
-        $template = $twig->load('layout.twig');
-        echo $template->render(
-            [
-            'modules' => $router->getModules(),
-            'content' => $response->getPayload()
-            ]
-        );
-        break;
     case 404:
-        $template = $twig->load('404.twig');
-        echo $template->render();
+        $renderer = new TemplateRenderer(0);
+        echo $renderer('404.twig');
         break;
     case 302:
         header($response->getRedirectHeader());
