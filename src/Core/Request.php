@@ -22,6 +22,16 @@ class Request
     }
 
     /**
+     * Get the HTTP method of the request.
+     *
+     * @return string - The HTTP method.
+     */
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    /**
      * Get the privilege level of the request.
      *
      * @return int - The privilege level.

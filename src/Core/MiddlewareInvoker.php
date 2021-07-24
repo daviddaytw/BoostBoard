@@ -8,6 +8,7 @@ class MiddlewareInvoker
      * List of middlewares, the request will be pass by the order in this array.
      */
     protected $middlewares = [
+        \BoostBoard\Middlewares\CSRFProtection::class,
         \BoostBoard\Middlewares\SecureAuthentication::class,
     ];
 

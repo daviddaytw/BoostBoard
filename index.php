@@ -46,7 +46,7 @@ $statusCode = $response->getStatusCode();
 http_response_code($statusCode);
 switch ($statusCode) {
     case 404:
-        $renderer = new TemplateRenderer(0);
+        $renderer = new TemplateRenderer($request);
         echo $renderer('404.twig');
         break;
     case 302:

@@ -4,6 +4,7 @@
   <div>
     <h1>User Management</h1>
     <form method="POST" action="/users/create">
+      <input type="hidden" name="_token" value="{{ csrf_token }}" >
       <div class="mb-3">
         <label for="usernameInput" class="form-label">Username</label>
         <input type="text" class="form-control" id="usernameInput" name="username" required>

@@ -38,7 +38,7 @@ class AbstractController
      */
     public function view(string $path, array $params = []): string
     {
-        $renderer = new TemplateRenderer($this->request->privilege);
+        $renderer = new TemplateRenderer($this->request);
         return $renderer($path, $params);
     }
 }

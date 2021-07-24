@@ -4,6 +4,7 @@ namespace BoostBoard\Middlewares;
 
 use BoostBoard\Core\Request;
 use BoostBoard\Core\Response;
+use BoostBoard\Core\TemplateRenderer;
 
 class SecureAuthentication extends AbstractMiddleware
 {
@@ -83,12 +84,9 @@ class SecureAuthentication extends AbstractMiddleware
             $response->block();
             $response->setRedirect('/');
         } else {
-            $loader = new \Twig\Loader\FilesystemLoader('views');
-            $twig = new \Twig\Environment($loader);
-
-            $template = $twig->load('auth.twig');
+            $template = new TemplateRenderer($request);
             $response->block();
-            $response->setPayload($template->render());
+            $response->setPayload($template('auth.twig', []));
         }
     }
 }
