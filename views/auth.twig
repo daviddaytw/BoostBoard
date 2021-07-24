@@ -10,20 +10,20 @@
 
   <title>BoostBoard</title>
   </head>
-  <body>
-    <div id="content" class="container p-4">
-      <h1>Log in to BoostBoard</h1>
-      <form method="POST" action="/login">
+  <body class="text-center text-light bg-dark py-4">
+    <div class="w-100 p-1 m-auto" style="max-width: 330px;">
+      <h1 class="h-3 fw-normal">Please sign in</h1>
+      <form method="POST" action="/login" class="text-dark">
         <input type="hidden" name="_token" value="{{ csrf_token }}" >
-        <div class="mb-3">
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="usernameInput" name="username" placeholder="Username" required>
             <label for="usernameInput" class="form-label">Username</label>
-            <input type="text" class="form-control" id="usernameInput" name="username" required>
         </div>
-        <div class="mb-3">
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="passwordInput" name="password" placeholder="Password" required>
             <label for="passwordInput" class="form-label">Password</label>
-            <input type="password" class="form-control" id="passwordInput" name="password" required>
         </div>
-        <button type="submit" class="btn btn-primary">Login</button>
+        <button type="submit" class="w-100 btn btn-primary">Login</button>
       </form>
     </div>
 
