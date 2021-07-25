@@ -22,9 +22,9 @@ class AbstractController
      * Get parameter from request.
      *
      * @param string $key - The key of the parameter.
-     * @return string - The value of the parameter.
+     * @return ?string - The value of the parameter.
      */
-    public function getParam(string $key): string
+    public function getParam(string $key): ?string
     {
         return $this->request->params[$key];
     }
