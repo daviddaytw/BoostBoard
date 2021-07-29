@@ -36,6 +36,7 @@
     var form = new FormData();
     form.append('id', userId);
     form.append('password', result);
+    form.append('_token', '{{ csrf_token }}');
     
     fetch('/users/update-password', {
       method: 'POST',
