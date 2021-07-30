@@ -1,0 +1,31 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+  <div class="container p-4">
+    <h1 class="text-center">Profile Setting</h1>
+    <form action="/profile" method="POST">
+      <input type="hidden" name="_token" value="{{ csrf_token }}">
+      <div class="mb-3 row">
+        <label for="staticUsername" class="col-sm-2 col-form-label">Username</label>
+        <div class="col-sm-10">
+          <input type="text" readonly class="form-control-plaintext" id="staticUsername" value="{{ userData.username }}">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="inputPassword" class="col-sm-2 col-form-label">Reset Password</label>
+        <div class="col-sm-10">
+          <input type="password" name="password" class="form-control" id="inputPassword">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm Password</label>
+        <div class="col-sm-10">
+          <input type="password" name="confirmed_password" class="form-control" id="confirmPassword">
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <button class="btn btn-primary" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -6,7 +6,8 @@ class RouteTable
 {
     protected $routers = [
         Welcome\Router::class,
-        UserManagement\Router::class
+        UserManagement\Router::class,
+        Profile\Router::class,
     ];
 
     public function __invoke(int $privilege)
