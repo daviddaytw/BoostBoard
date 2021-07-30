@@ -9,7 +9,6 @@ class Router extends AbstractRouter
     public static $config = [
         'display' => 'Users',
         'route' => '/users',
-        'order' => 9,
         'permission' => 250,
         'database' => [
             'dsn' => 'sqlite:data.db'

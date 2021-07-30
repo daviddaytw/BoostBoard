@@ -23,10 +23,10 @@ class RouteHandler
     /**
      * Invoking router will call the corresponding controller to render the page.
      *
-     * @param Request  $request   - The request object.
-     * @param Response &$response - The response object.
+     * @param Request  $req   - The request object.
+     * @param Response $res - The response object.
      */
-    public function __invoke(Request $request, Response &$response): void
+    public function __invoke(Request $req, Response $res): Response
     {
 
         $routerClass = null;
@@ -34,9 +34,9 @@ class RouteHandler
         foreach ($this->modules as $module) {
             $route = $module['prefix'];
             if ($prefixLength < strlen($route)) {
-                if (substr($request->uri, 0, strlen($route)) == $route) {
+                if (substr($req->uri, 0, strlen($route)) == $route) {
                     $routerClass = $module['router'];
-                    $remain = substr($request->uri, strlen($route));
+                    $remain = substr($req->uri, strlen($route));
                     if ($remain == '' || $remain[0] != '/') {
                         $remain = '/' . $remain;
                     }
@@ -47,10 +47,11 @@ class RouteHandler
 
         if ($routerClass != null) {
             $router = new $routerClass();
-            $request->uri = $remain;
-            $router($request, $response);
+            $req->uri = $remain;
+            $res = $router($req, $res);
         } else {
-            $response->setStatusCode(404);
+            $res->setStatusCode(404);
         }
+        return $res;
     }
 }

@@ -14,10 +14,10 @@ final class WelcomeTest extends TestCase
     public function testIndex(): void
     {
         $router = new Router();
-        $request = new Request('/');
-        $response = new Response();
-        $router($request, $response);
-        $this->assertStringContainsString('Welcome', $response->getPayload());
+        $req = new Request('/');
+        $res = new Response();
+        $res = $router($req, $res);
+        $this->assertStringContainsString('Welcome', $res->getPayload());
     }
 
     /**
@@ -26,9 +26,9 @@ final class WelcomeTest extends TestCase
     public function testChart(): void
     {
         $router = new Router();
-        $request = new Request('/chart');
-        $response = new Response();
-        $router($request, $response);
-        $this->assertStringContainsString('', $response->getPayload());
+        $req = new Request('/chart');
+        $res = new Response();
+        $res = $router($req, $res);
+        $this->assertStringContainsString('', $res->getPayload());
     }
 }

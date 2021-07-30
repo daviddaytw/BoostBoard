@@ -31,28 +31,28 @@ session_start();
 
 $url = strtok($_SERVER["REQUEST_URI"], '?');
 $method = $_SERVER['REQUEST_METHOD'];
-$request = new \BoostBoard\Core\Request($url, $method, $_REQUEST, $_SESSION);
-$response = new \BoostBoard\Core\Response();
+$req = new \BoostBoard\Core\Request($url, $method, $_REQUEST, $_SESSION);
+$res = new \BoostBoard\Core\Response();
 
 $middlewareInvoker = new \BoostBoard\Core\MiddlewareInvoker();
-$middlewareInvoker($request, $response);
+$res = $middlewareInvoker($req, $res);
 
-if (!$response->isBlock()) {
-    $router = new \BoostBoard\Core\RouteHandler($request->getPrivilege());
-    $router($request, $response);
+if (!$res->isBlock()) {
+    $router = new \BoostBoard\Core\RouteHandler($req->getPrivilege());
+    $res = $router($req, $res);
 }
 
-$statusCode = $response->getStatusCode();
+$statusCode = $res->getStatusCode();
 http_response_code($statusCode);
 switch ($statusCode) {
     case 404:
-        $renderer = new TemplateRenderer($request);
+        $renderer = new TemplateRenderer($req);
         echo $renderer('404.twig');
         break;
     case 302:
-        header($response->getRedirectHeader());
+        header($res->getRedirectHeader());
         break;
     default:
-        echo $response->getPayload();
+        echo $res->getPayload();
         break;
 }

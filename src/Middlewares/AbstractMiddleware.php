@@ -10,13 +10,14 @@ abstract class AbstractMiddleware
     /**
      * Invoke the middleware will check if request is authenticated.
      *
-     * @param Request  &$request  - The request object.
-     * @param Response &$response - The response object.
+     * @param Request  &$req  - The request object.
+     * @param Response $res - The response object.
      *
      * @return bool - Whether to pass to next middleware.
      */
-    public function __invoke(Request &$request, Response &$response): void
+    public function __invoke(Request &$req, Response $res): Response
     {
         // code here
+        return $res;
     }
 }

@@ -6,14 +6,14 @@ use BoostBoard\Modules\RouteTable;
 
 class TemplateRenderer
 {
-    private Request $request;
+    private Request $req;
     private $modules = [];
 
-    public function __construct(Request $request)
+    public function __construct(Request $req)
     {
-        $this->request = $request;
+        $this->req = $req;
         $routeTable = new RouteTable();
-        $this->modules = $routeTable($request->getPrivilege());
+        $this->modules = $routeTable($req->getPrivilege());
     }
 
     public function __invoke(string $template, $params): string
@@ -21,7 +21,7 @@ class TemplateRenderer
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../../views');
         $twig = new \Twig\Environment($loader);
         $twig->addGlobal('modules', $this->modules);
-        $twig->addGlobal('csrf_token', $this->request->getSession('csrf_token'));
+        $twig->addGlobal('csrf_token', $this->req->getSession('csrf_token'));
         $template = $twig->load($template);
         return $template->render($params);
     }

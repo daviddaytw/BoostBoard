@@ -11,43 +11,43 @@ final class RequestTest extends TestCase
 {
     public function testConstruct(): Request
     {
-        $request = new Request('/', 'GET');
-        $this->assertNotNull($request);
+        $req = new Request('/', 'GET');
+        $this->assertNotNull($req);
 
-        return $request;
+        return $req;
     }
 
     /**
      * @depends testConstruct
      */
-    public function testPrivilege(Request $request): Request
+    public function testPrivilege(Request $req): Request
     {
         $privilege = 3;
-        $request->setPrivilege($privilege);
-        $this->assertEquals($privilege, $request->getPrivilege());
-        return $request;
+        $req->setPrivilege($privilege);
+        $this->assertEquals($privilege, $req->getPrivilege());
+        return $req;
     }
 
     public function testParam(): Request
     {
         $value = 'Some val';
-        $request = new Request('/', 'POST', ['p' => $value]);
-        $this->assertEquals($value, $request->getParam('p'));
-        $this->assertNull($request->getParam('q'));
-        return $request;
+        $req = new Request('/', 'POST', ['p' => $value]);
+        $this->assertEquals($value, $req->getParam('p'));
+        $this->assertNull($req->getParam('q'));
+        return $req;
     }
 
     /**
      * @depends testConstruct
      */
-    public function testSession(Request $request): Request
+    public function testSession(Request $req): Request
     {
         $key = 'key';
         $value = 'some val';
-        $request->setSession($key, $value);
-        $this->assertEquals($value, $request->getSession($key));
-        $request->unsetSession($key);
-        $this->assertNull($request->getSession($key));
-        return $request;
+        $req->setSession($key, $value);
+        $this->assertEquals($value, $req->getSession($key));
+        $req->unsetSession($key);
+        $this->assertNull($req->getSession($key));
+        return $req;
     }
 }

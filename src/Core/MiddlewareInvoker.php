@@ -15,17 +15,18 @@ class MiddlewareInvoker
     /**
      * Invoking middleware to let request pass all middlewares.
      *
-     * @param Request  &$request  - The request object.
-     * @param Response &$response - The response object.
+     * @param Request  &$req  - The request object.
+     * @param Response $res - The response object.
      */
-    public function __invoke(Request &$request, Response &$response): void
+    public function __invoke(Request &$req, Response $res): Response
     {
         foreach ($this->middlewares as $class) {
             $middleware = new $class();
-            $middleware($request, $response);
-            if ($response->isBlock()) {
+            $res = $middleware($req, $res);
+            if ($res->isBlock()) {
                 break;
             }
         }
+        return $res;
     }
 }

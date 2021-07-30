@@ -4,12 +4,14 @@ namespace BoostBoard\Modules\Welcome;
 
 use PDO;
 use BoostBoard\Core\AbstractController;
+use BoostBoard\Core\Request;
+use BoostBoard\Core\Response;
 use CpChart\Data;
 use CpChart\Image;
 
 class Controller extends AbstractController
 {
-    public function index(PDO $db): string
+    public function index(Request $req, Response $res, PDO $db): Response
     {
         $userCount = $db->query("SELECT COUNT(*) FROM users")->fetchColumn();
         $sessionCount = $db->query("SELECT COUNT(*) FROM sessions WHERE createAt >= datetime('now','-24 hours')")
@@ -21,7 +23,7 @@ class Controller extends AbstractController
         ]);
     }
 
-    public function plotChart(PDO $db): string
+    public function plotChart(Request $req, Response $res, PDO $db): Response
     {
         $rows = $db->query("SELECT COUNT(*),strftime ('%H',createAt) hour FROM sessions
                             WHERE `createAt` >= date('now', '-1 days')
@@ -43,6 +45,7 @@ class Controller extends AbstractController
         $image->drawLegend(600, 40, ["Style" => LEGEND_BOX, "Mode" => LEGEND_HORIZONTAL]);
         $image->Stroke();
 
-        return '';
+        $res->setPayload('');
+        return $res;
     }
 }

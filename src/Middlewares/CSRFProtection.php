@@ -12,22 +12,23 @@ class CSRFProtection extends AbstractMiddleware
      *
      * This middleware will verify and generate token to store in seesion.
      *
-     * @param Request  &$request  - The request object.
-     * @param Response &$response - The response object.
+     * @param Request  &$req  - The request object.
+     * @param Response $res - The response object.
      *
      * @return bool - Whether to pass to next middleware.
      */
-    public function __invoke(Request &$request, Response &$response): void
+    public function __invoke(Request &$req, Response $res): Response
     {
-        if ($request->getMethod() == 'POST') {
-            $request_token = $request->getParam('_token');
-            $csrf_token = $request->getSession('csrf_token');
-            if (!hash_equals($request_token, $csrf_token)) {
-                $response->block();
-                $response->setPayload('<h1>403 Forbidden</h1>CSRF verification failed.');
-                return ;
+        if ($req->getMethod() == 'POST') {
+            $req_token = $req->getParam('_token');
+            $csrf_token = $req->getSession('csrf_token');
+            if (!hash_equals($req_token, $csrf_token)) {
+                $res->block();
+                $res->setPayload('<h1>403 Forbidden</h1>CSRF verification failed.');
             }
+        } else {
+            $req->setSession('csrf_token', bin2hex(random_bytes(32)));
         }
-        $request->setSession('csrf_token', bin2hex(random_bytes(32)));
+        return $res;
     }
 }

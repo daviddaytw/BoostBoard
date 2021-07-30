@@ -14,10 +14,10 @@ final class MiddlwareTest extends TestCase
     public function testInvoke(): MiddlewareInvoker
     {
         $middleware = new MiddlewareInvoker();
-        $request = new Request('/', 'GET', ['privilege' => 0]);
-        $response = new Response();
-        $middleware($request, $response);
-        $this->assertNotNull($response->getPayload());
+        $req = new Request('/', 'GET', ['privilege' => 0]);
+        $res = new Response();
+        $res = $middleware($req, $res);
+        $this->assertNotNull($res->getPayload());
         return $middleware;
     }
 }

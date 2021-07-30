@@ -27,19 +27,17 @@ class AbstractRouter
     /**
      * Invoke the router.
      *
-     * @param Request  $request  - The request object.
-     * @param Response $response - The resposne object.
+     * @param Request  $req  - The request object.
+     * @param Response $res - The resposne object.
      */
-    public function __invoke(Request $request, Response &$response): void
+    public function __invoke(Request $req, Response $res): Response
     {
         foreach ($this->routes as $route) {
-            if ($route['uri'] == $request->uri && $route['method'] == $request->method) {
-                $controller = new $route['controller']($request, $response);
+            if ($route['uri'] == $req->uri && $route['method'] == $req->getMethod()) {
+                $controller = new $route['controller']($req, $res);
                 $callback = $route['callback'];
-                $payload = $controller->$callback($this->db);
-                if (!is_null($payload)) {
-                    $response->setPayload($payload);
-                }
+                $res = $controller->$callback($req, $res, $this->db);
+                return $res;
             }
         }
     }

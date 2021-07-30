@@ -14,10 +14,10 @@ final class UserManagementTest extends TestCase
     public function testIndex(): Router
     {
         $router = new Router();
-        $request = new Request('/');
-        $response = new Response();
-        $router($request, $response);
-        $this->assertNotNull($response->getPayload());
+        $req = new Request('/');
+        $res = new Response();
+        $res = $router($req, $res);
+        $this->assertNotNull($res->getPayload());
 
         return $router;
     }
@@ -27,7 +27,7 @@ final class UserManagementTest extends TestCase
      */
     public function testCreate(Router $router): Router
     {
-        $request = new Request(
+        $req = new Request(
             '/create',
             'POST',
             [
@@ -36,9 +36,9 @@ final class UserManagementTest extends TestCase
             'privilege' => '0'
             ]
         );
-        $response = new Response();
-        $router($request, $response);
-        $this->assertEquals(302, $response->getStatusCode());
+        $res = new Response();
+        $res = $router($req, $res);
+        $this->assertEquals(302, $res->getStatusCode());
         return $router;
     }
 
@@ -47,15 +47,15 @@ final class UserManagementTest extends TestCase
      */
     public function testDelete(Router $router): void
     {
-        $request = new Request(
+        $req = new Request(
             '/delete',
             'GET',
             [
             'id' => '1',
             ]
         );
-        $response = new Response();
-        $router($request, $response);
-        $this->assertEquals(302, $response->getStatusCode());
+        $res = new Response();
+        $res = $router($req, $res);
+        $this->assertEquals(302, $res->getStatusCode());
     }
 }

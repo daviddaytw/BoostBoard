@@ -11,30 +11,30 @@ final class ResponseTest extends TestCase
 {
     public function testConstruct(): Response
     {
-        $response = new Response();
-        $this->assertNotNull($response);
-        return $response;
+        $res = new Response();
+        $this->assertNotNull($res);
+        return $res;
     }
 
     /**
      * @depends testConstruct
      */
-    public function testRedirect(Response $response): Response
+    public function testRedirect(Response $res): Response
     {
         $URL = '/test';
-        $response->setRedirect($URL);
-        $this->assertEquals('Location: ' . $URL, $response->getRedirectHeader());
-        return $response;
+        $res->setRedirect($URL);
+        $this->assertEquals('Location: ' . $URL, $res->getRedirectHeader());
+        return $res;
     }
 
     /**
      * @depends testConstruct
      */
-    public function testPayload(Response $response): Response
+    public function testPayload(Response $res): Response
     {
         $testPayload = 'Some payload';
-        $response->setPayload($testPayload);
-        $this->assertEquals($testPayload, $response->getPayload());
-        return $response;
+        $res->setPayload($testPayload);
+        $this->assertEquals($testPayload, $res->getPayload());
+        return $res;
     }
 }

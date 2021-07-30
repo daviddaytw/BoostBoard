@@ -20,14 +20,14 @@ class SecureAuthentication extends AbstractMiddleware
     /**
      * Authenticate user, if valid then set the session.
      *
-     * @param Request $request - The request object.
+     * @param Request $req - The request object.
      *
      * @return bool - Whether the user is valid.
      */
-    private function authenticate(Request &$request): void
+    private function authenticate(Request &$req): void
     {
-        $username = $request->params['username'];
-        $password = $request->params['password'];
+        $username = $req->getParam('username');
+        $password = $req->getParam('password');
         $sth = $this->db->prepare('SELECT id, privilege FROM users WHERE username = ? AND password = ?');
         $sth->execute([$username, hash('sha256', $password)]);
         $result = $sth->fetch(\PDO::FETCH_ASSOC);
@@ -38,25 +38,26 @@ class SecureAuthentication extends AbstractMiddleware
             $sth = $this->db->prepare('INSERT INTO sessions (userID, token) VALUES (?, ?)');
             $sth->execute([$result['id'], $token]);
 
-            $request->setSession('token', $token);
+            $req->setSession('userId', $result['id']);
+            $req->setSession('token', $token);
         }
     }
 
     /**
      * Verify user session
      *
-     * @param Request &$request - The request object.
+     * @param Request &$req - The request object.
      *
      * @return bool - Whether the token is valid.
      */
-    private function verifySession(Request &$request): bool
+    private function verifySession(Request &$req): bool
     {
         $sth = $this->db->prepare('SELECT userId FROM sessions WHERE token = ? ');
-        $sth->execute([$request->getSession('token')]);
+        $sth->execute([$req->getSession('token')]);
         if ($userId = $sth->fetchColumn()) {
             $sth = $this->db->prepare('SELECT privilege FROM users WHERE id = ?');
             $sth->execute([$userId]);
-            $request->setPrivilege($sth->fetchColumn());
+            $req->setPrivilege($sth->fetchColumn());
             return true;
         }
         return false;
@@ -65,28 +66,29 @@ class SecureAuthentication extends AbstractMiddleware
     /**
      * Invoke the middleware will check if request is authenticated.
      *
-     * @param Request  &$request  - The request object.
-     * @param Response &$response - The response object.
+     * @param Request  &$req  - The request object.
+     * @param Response $res - The response object.
      *
      * @return bool - Whether to pass to next middleware.
      */
-    public function __invoke(Request &$request, Response &$response): void
+    public function __invoke(Request &$req, Response $res): Response
     {
-        if (!is_null($request->getSession('token'))) {
-            if ($request->uri == '/logout' || !$this->verifySession($request)) {
-                $request->unsetSession('token');
-                $response->block();
-                $response->setRedirect('/');
+        if (!is_null($req->getSession('token'))) {
+            if ($req->uri == '/logout' || !$this->verifySession($req)) {
+                $req->unsetSession('token');
+                $res->block();
+                $res->setRedirect('/');
             }
             // Otherwise, permit the access.
-        } elseif ($request->uri == '/login' && $request->method == 'POST') {
-            $this->authenticate($request);
-            $response->block();
-            $response->setRedirect('/');
+        } elseif ($req->uri == '/login' && $req->getMethod() == 'POST') {
+            $this->authenticate($req);
+            $res->block();
+            $res->setRedirect('/');
         } else {
-            $template = new TemplateRenderer($request);
-            $response->block();
-            $response->setPayload($template('auth.twig', []));
+            $template = new TemplateRenderer($req);
+            $res->block();
+            $res->setPayload($template('auth.twig', []));
         }
+        return $res;
     }
 }

@@ -4,6 +4,11 @@ namespace BoostBoard\Core;
 
 class Request
 {
+    private string $method;
+    private array $params;
+    private int $privilege;
+    private array $session;
+
     /**
      * Construct a request.
      *
@@ -49,6 +54,16 @@ class Request
     public function setPrivilege(int $privilege): void
     {
         $this->privilege = $privilege;
+    }
+
+    /**
+     * Get the user id of the current request.
+     *
+     * @return int - The ID of user.
+     */
+    public function getUserId(): int
+    {
+        return $this->getSession('userId');
     }
 
     /**
